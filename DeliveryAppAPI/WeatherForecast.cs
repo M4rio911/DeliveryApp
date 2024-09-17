@@ -1,4 +1,4 @@
-namespace DeliveryAppAPI
+namespace DeliveryApp
 {
     public class WeatherForecast
     {

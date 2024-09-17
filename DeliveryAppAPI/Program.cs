@@ -1,19 +1,36 @@
-using DeliveryAppAPI.Persistance;
+using DeliveryApp.API.Configuration;
+using DeliveryApp.Persistance;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.LoadAppConfiguration();
+var configuration = builder.Configuration;
 
-// Add services to the container.
+//SERILOG
+builder.ConfigureSerilog();
+builder.Host.UseSerilog();
 
+//APP
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+//SWAGGER
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<DeliveryAppDbContext>(options =>
+//DB
+builder.Services.AddDbContext<DeliveryDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+////ENTITY
+//builder.Services.AddIdentity<User, Role>()
+//    .AddEntityFrameworkStores<DeliveryDbContext>()
+//    .AddUserManager<UserManager<User>>()
+//    .AddRoleManager<UserManager<Role>>();
 
 var app = builder.Build();
 
@@ -24,8 +41,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

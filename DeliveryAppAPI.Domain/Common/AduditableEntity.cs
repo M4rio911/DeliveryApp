@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeliveryAppAPI.Domain.Common
+namespace DeliveryApp.Domain.Common
 {
     public class AuditableEntity
     {

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace DeliveryAppAPI.Controllers
+namespace DeliveryApp.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
