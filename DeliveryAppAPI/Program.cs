@@ -23,7 +23,7 @@ builder.Services.AddSwaggerGen();
 //DB
 builder.Services.AddDbContext<DeliveryDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 ////ENTITY
