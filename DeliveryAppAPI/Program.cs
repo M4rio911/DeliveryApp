@@ -2,6 +2,7 @@ using DeliveryApp.API.Configuration;
 using DeliveryApp.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.LoadAppConfiguration();
@@ -20,8 +21,15 @@ builder.Services.AddEndpointsApiExplorer();
 //SWAGGER
 builder.Services.AddSwaggerGen();
 
+//MediatR
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+
 //DB
-builder.Services.AddDbContext<DeliveryDbContext>(options =>
+//builder.Services.AddDbContext<DeliveryDbContext>(options =>
+//{
+//    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+//});
+builder.Services.AddEntityFrameworkNpgsql().AddDbContext<DeliveryDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });

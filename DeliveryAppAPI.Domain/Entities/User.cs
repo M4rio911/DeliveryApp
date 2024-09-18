@@ -1,11 +1,11 @@
 ﻿using DeliveryApp.Domain.Common;
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DeliveryApp.Domain.Entities;
 
 public class User : IdentityUser
 {
-    public int Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public bool ActiveStatus { get; set; } 

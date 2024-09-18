@@ -21,7 +21,6 @@ public class DeliveryDbContext : IdentityDbContext<User>
     public DbSet<Payment> Payments { get; set; }
     public DbSet<Transportation> Transportations { get; set; }
     public DbSet<TransportationItem> TransportationItems { get; set; }
-    public DbSet<User> Users { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -36,64 +35,53 @@ public class DeliveryDbContext : IdentityDbContext<User>
             b.Property(a => a.Street).HasMaxLength(50);
             b.Property(a => a.Number).HasMaxLength(20);
         });
-
         builder.Entity<Car>(b =>
         {
             b.HasKey(c => c.Id);
             b.Property(a => a.Name).HasMaxLength(100);
         });
-
         builder.Entity<Country>(b =>
         {
             b.HasKey(c => c.Id);
             b.Property(c => c.Name).HasMaxLength(50);
             b.Property(c => c.Code).HasMaxLength(10);
         });
-
         builder.Entity<Currency>(b =>
         {
             b.HasKey(c => c.Id);
             b.Property(c => c.Name).HasMaxLength(50);
             b.Property(c => c.Shortcut).HasMaxLength(10);
         });
-
         builder.Entity<Dictionary>(b =>
         {
             b.HasKey(c => c.Id);
             b.Property(c => c.Name).HasMaxLength(100);
         });
-
         builder.Entity<DictionaryType>(b =>
         {
             b.HasKey(c => c.Id);
             b.Property(c => c.Name).HasMaxLength(50);
         });
-
         builder.Entity<Driver>(b =>
         {
             b.HasKey(c => c.Id);
         });
-
         builder.Entity<Package>(b =>
         {
             b.HasKey(c => c.Id);
         });
-
         builder.Entity<Payment>(b =>
         {
             b.HasKey(c => c.Id);
         });
-
         builder.Entity<Transportation>(b =>
         {
             b.HasKey(c => c.Id);
         });
-
         builder.Entity<TransportationItem>(b =>
         {
             b.HasKey(c => c.Id);
         });
-
         builder.Entity<User>(b =>
         {
             b.Property(u => u.FirstName).HasMaxLength(30);
@@ -133,7 +121,7 @@ public class DeliveryDbContext : IdentityDbContext<User>
         builder.Entity<Dictionary>()
             .HasOne(c => c.DictionaryType)
             .WithMany()
-            .HasForeignKey(l => l.DictionaryType)
+            .HasForeignKey(l => l.DictionaryTypeId)
             .OnDelete(DeleteBehavior.Restrict);
         #endregion
         #region Driver
@@ -210,13 +198,19 @@ public class DeliveryDbContext : IdentityDbContext<User>
             .WithMany()
             .HasForeignKey(l => l.TransportationStatusId)
             .OnDelete(DeleteBehavior.Restrict);
-        #endregion
-        #region TransportationItem
-        builder.Entity<TransportationItem>()
-            .HasOne(c => c.Transportation)
-            .WithMany()
+
+        builder.Entity<Transportation>()
+            .HasMany(c => c.TransportationItems)
+            .WithOne(c => c.Transportation)
             .HasForeignKey(l => l.TransportationId)
             .OnDelete(DeleteBehavior.Restrict);
+        #endregion
+        #region TransportationItem
+        //builder.Entity<TransportationItem>()
+        //    .HasOne(c => c.Transportation)
+        //    .WithMany()
+        //    .HasForeignKey(l => l.TransportationId)
+        //    .OnDelete(DeleteBehavior.Restrict);
 
         builder.Entity<TransportationItem>()
             .HasOne(c => c.Package)

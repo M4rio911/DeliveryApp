@@ -9,6 +9,7 @@ public class Dictionary : AuditableEntity
     public int Id { get; set; }
     public int TypeId { get; set; }
     public DictionaryType DictionaryType { get; set; }
+    public int DictionaryTypeId { get; set; }
     public string Name { get; set; }
     public bool IsDefault { get; set; }
 }
