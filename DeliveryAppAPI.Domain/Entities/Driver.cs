@@ -1,5 +1,4 @@
-﻿using DeliveryApp.Domain.Entities;
-using DeliveryApp.Domain.Common;
+﻿using DeliveryApp.Domain.Common;
 
 namespace DeliveryApp.Domain.Entities;
 

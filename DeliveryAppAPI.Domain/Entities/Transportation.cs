@@ -1,5 +1,4 @@
 ﻿using DeliveryApp.Domain.Common;
-using DeliveryApp.Domain.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DeliveryApp.Domain.Entities;

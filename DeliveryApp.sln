@@ -11,7 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeliveryApp.Persistance", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeliveryApp.Application", "DeliveryApp.Application\DeliveryApp.Application.csproj", "{A59450B7-B2BF-435F-95AA-605941894D84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeliveryApp.Infrastructure", "DeliveryApp.Infrastructure\DeliveryApp.Infrastructure.csproj", "{5E6644D9-682C-45F9-8BFE-810EDE741702}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeliveryApp.Infrastructure", "DeliveryApp.Infrastructure\DeliveryApp.Infrastructure.csproj", "{5E6644D9-682C-45F9-8BFE-810EDE741702}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A59450B7-B2BF-435F-95AA-605941894D84} = {A59450B7-B2BF-435F-95AA-605941894D84}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

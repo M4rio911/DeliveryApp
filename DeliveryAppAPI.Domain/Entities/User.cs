@@ -1,6 +1,4 @@
-﻿using DeliveryApp.Domain.Common;
-using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace DeliveryApp.Domain.Entities;
 

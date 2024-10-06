@@ -28,6 +28,7 @@ public class DeliveryDbContext : IdentityDbContext<User>
         base.OnModelCreating(builder);
 
         #region Table Properties
+
         builder.Entity<Address>(b =>
         {
             b.HasKey(a => a.Id);
@@ -38,7 +39,6 @@ public class DeliveryDbContext : IdentityDbContext<User>
         builder.Entity<Car>(b =>
         {
             b.HasKey(c => c.Id);
-            b.Property(a => a.Name).HasMaxLength(100);
         });
         builder.Entity<Country>(b =>
         {

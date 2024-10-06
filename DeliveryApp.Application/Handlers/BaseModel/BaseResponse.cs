@@ -23,5 +23,10 @@ namespace DeliveryApp.Application.Handlers.BaseModel
             Success = success;
             Errors = errors;
         }
+        public BaseResponse(List<string> errors)
+        {
+            Success = false;
+            Errors = errors;
+        }
     }
 }

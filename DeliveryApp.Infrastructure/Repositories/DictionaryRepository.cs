@@ -1,7 +1,7 @@
 ﻿using DeliveryApp.Application.Interfaces.Repositories;
 using DeliveryApp.Domain.Entities;
 
-namespace DeliveryApp.Application.Repositories;
+namespace DeliveryApp.Infrastructure.Repositories;
 
 public class DictionaryRepository : IDictionaryRepository
 {

@@ -1,10 +1,11 @@
-﻿using MediatR;
+﻿using DeliveryApp.Application.Handlers.Cars.AddCar;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeliveryApp.API.Controllers;
 
 [Produces("application/json")]
-[Route("cars/[controller]")]
+[Route("[controller]")]
 [ApiController]
 
 public class CarsController : ControllerBase
@@ -25,9 +26,15 @@ public class CarsController : ControllerBase
 
     [HttpPost]
     [Route("addCar")]
-    public async Task<IActionResult> AddCar()
+    public async Task<IActionResult> AddCar([FromBody] AddCarParameters parameters)
     {
-        return Ok();
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        var result = await _mediator.Send(new AddCar(parameters));
+        return Ok(result);
     }
 
     [HttpDelete]

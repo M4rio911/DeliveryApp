@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace DeliveryApp.Domain.Common
+namespace DeliveryApp.Domain.Common;
+
+public class AuditableEntity
 {
-    public class AuditableEntity
-    {
-        [MaxLength(150)]
-        public string CreatedBy { get; set; } = default!;
+    [MaxLength(150)]
+    public string CreatedBy { get; set; } = default!;
 
-        public DateTime Created { get; set; }
+    public DateTime Created { get; set; }
 
-        [MaxLength(150)]
-        public string ModifiedBy { get; set; } = default!;
+    [MaxLength(150)]
+    public string ModifiedBy { get; set; } = default!;
 
-        public DateTime? Modified { get; set; }
-    }
+    public DateTime? Modified { get; set; }
 }
