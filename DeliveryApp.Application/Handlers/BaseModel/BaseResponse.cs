@@ -15,9 +15,6 @@ namespace DeliveryApp.Application.Handlers.BaseModel
         [JsonProperty("errors", NullValueHandling = NullValueHandling.Ignore)]
         public List<string> Errors { get; set; }
 
-        public BaseResponse()
-        {
-        }
         public BaseResponse(bool? success, List<string> errors)
         {
             Success = success;
@@ -27,6 +24,11 @@ namespace DeliveryApp.Application.Handlers.BaseModel
         {
             Success = false;
             Errors = errors;
+        }
+        public BaseResponse(string error)
+        {
+            Success = false;
+            Errors = [error];
         }
     }
 }

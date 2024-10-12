@@ -13,11 +13,7 @@ namespace DeliveryApp.Application.Handlers.Users.GetAllUsers
 
         [JsonProperty("users")]
         public List<UserDto> Users { get; set; }
-        public GetAllUsersResponse() 
-        {
-            
-        }
-
+        public GetAllUsersResponse() : base(true, null) { }
     }
     public class UserDto
     {

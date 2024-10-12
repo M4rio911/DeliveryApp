@@ -1,4 +1,8 @@
 ﻿using DeliveryApp.Application.Handlers.Cars.AddCar;
+using DeliveryApp.Application.Handlers.Cars.EditCar;
+using DeliveryApp.Application.Handlers.Cars.GetCar;
+using DeliveryApp.Application.Handlers.Cars.GetCars;
+using DeliveryApp.Application.Handlers.Cars.RemoveCar;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,10 +22,29 @@ public class CarsController : ControllerBase
     }
 
     [HttpGet]
-    [Route("getCar")]
-    public async Task<IActionResult> GetCar()
+    [Route("getCars")]
+    public async Task<IActionResult> GetCars()
     {
-        return Ok();
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        var result = await _mediator.Send(new GetCars());
+        return Ok(result);
+    }
+
+    [HttpGet]
+    [Route("getCar")]
+    public async Task<IActionResult> GetCar([FromQuery] GetCarParameters parameters)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        var result = await _mediator.Send(new GetCar(parameters));
+        return Ok(result);
     }
 
     [HttpPost]
@@ -39,15 +62,27 @@ public class CarsController : ControllerBase
 
     [HttpDelete]
     [Route("removeCar")]
-    public async Task<IActionResult> RemoveCar()
+    public async Task<IActionResult> RemoveCar([FromBody] RemoveCarParameters parameters)
     {
-        return Ok();
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        var result = await _mediator.Send(new RemoveCar(parameters));
+        return Ok(result);
     }
 
     [HttpPost]
-    [Route("removeCar")]
-    public async Task<IActionResult> EditCar()
+    [Route("editCar")]
+    public async Task<IActionResult> EditCar([FromBody] EditCarParameters parameters)
     {
-        return Ok();
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        var result = await _mediator.Send(new EditCar(parameters));
+        return Ok(result);
     }
 }

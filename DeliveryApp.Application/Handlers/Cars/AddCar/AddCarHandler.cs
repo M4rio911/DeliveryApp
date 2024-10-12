@@ -16,7 +16,7 @@ public class AddCarHandler : ICommandHandler<AddCar, AddCarResponse>
 
     public async Task<AddCarResponse> Handle(AddCar request, CancellationToken cancellationToken)
     {
-        var newCar = new Car()
+        var newCar = new Car
         {
             Brand = request.Brand,
             Model = request.Model,
@@ -26,10 +26,13 @@ public class AddCarHandler : ICommandHandler<AddCar, AddCarResponse>
             Seats = request.Seats,
             MaxLoad = request.MaxLoad,
             Created = DateTime.UtcNow,
+            CreatedBy = "testUser",
+            ModifiedBy = "testUser"
         };
 
+
         _context.Cars.Add(newCar);
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(cancellationToken);
 
         return new AddCarResponse();
     }
