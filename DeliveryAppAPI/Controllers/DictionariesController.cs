@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using DeliveryApp.Application.Handlers.Cars.RemoveCar;
+using DeliveryApp.Application.Handlers.Dictionaries.AddDictionaryType;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeliveryApp.API.Controllers;
@@ -53,9 +55,15 @@ public class DictionariesController : ControllerBase
 
     [HttpPost]
     [Route("addDictionaryType")]
-    public async Task<IActionResult> addDictionaryType()
+    public async Task<IActionResult> addDictionaryType(AddDictionaryTypeParameters parameters)
     {
-        return Ok();
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        var result = await _mediator.Send(new AddDictionaryType(parameters));
+        return Ok(result);
     }
 
     [HttpDelete]

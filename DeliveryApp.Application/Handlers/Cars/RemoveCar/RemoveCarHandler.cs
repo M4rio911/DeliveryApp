@@ -1,12 +1,10 @@
 ﻿using DeliveryApp.Application.Interfaces.Mediator;
-using DeliveryApp.Domain.Entities;
 using DeliveryApp.Persistance;
 
 namespace DeliveryApp.Application.Handlers.Cars.RemoveCar;
 
 public class RemoveCarHandler : ICommandHandler<RemoveCar, RemoveCarResponse>
 {
-    //private readonly 
     private readonly DeliveryDbContext _context;
 
     public RemoveCarHandler(DeliveryDbContext deliveryDbContext)

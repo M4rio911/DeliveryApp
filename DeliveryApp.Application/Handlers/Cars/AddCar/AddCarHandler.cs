@@ -6,7 +6,6 @@ namespace DeliveryApp.Application.Handlers.Cars.AddCar;
 
 public class AddCarHandler : ICommandHandler<AddCar, AddCarResponse>
 {
-    //private readonly 
     private readonly DeliveryDbContext _context;
 
     public AddCarHandler(DeliveryDbContext deliveryDbContext)
