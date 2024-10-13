@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Handlers\Dictionaries\AddDictionary\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\DeliveryAppAPI.Domain\DeliveryApp.Domain.csproj" />
     <ProjectReference Include="..\DeliveryAppAPI.Persistance\DeliveryApp.Persistance.csproj" />
   </ItemGroup>

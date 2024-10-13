@@ -1,5 +1,11 @@
-﻿using DeliveryApp.Application.Handlers.Cars.RemoveCar;
+﻿using DeliveryApp.Application.Handlers.Cars.GetCar;
+using DeliveryApp.Application.Handlers.Cars.RemoveCar;
+using DeliveryApp.Application.Handlers.Dictionaries.AddDictionary;
 using DeliveryApp.Application.Handlers.Dictionaries.AddDictionaryType;
+using DeliveryApp.Application.Handlers.Dictionaries.GetDictionary;
+using DeliveryApp.Application.Handlers.Dictionaries.GetDictionaryType;
+using DeliveryApp.Application.Handlers.Dictionaries.RemoveDictionary;
+using DeliveryApp.Application.Handlers.Dictionaries.RemoveDictionaryType;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,42 +26,59 @@ public class DictionariesController : ControllerBase
 
     [HttpGet]
     [Route("getDictionary")]
-    public async Task<IActionResult> getDictionary()
+    public async Task<IActionResult> getDictionary([FromQuery] GetDictionaryParameters parameters)
     {
-        return Ok();
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        var result = await _mediator.Send(new GetDictionary(parameters));
+        return Ok(result);
     }
 
     [HttpPost]
     [Route("addDictionary")]
-    public async Task<IActionResult> addDictionary()
+    public async Task<IActionResult> addDictionary([FromBody] AddDictionaryParameters parameters)
     {
-        return Ok();
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        var result = await _mediator.Send(new AddDictionary(parameters));
+        return Ok(result);
     }
 
     [HttpDelete]
     [Route("removeDictionary")]
-    public async Task<IActionResult> removeDictionary()
+    public async Task<IActionResult> removeDictionary([FromBody] RemoveDictionaryParameters parameters)
     {
-        return Ok();
-    }
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
 
-    [HttpPost]
-    [Route("removeDictionary")]
-    public async Task<IActionResult> editDictionary()
-    {
-        return Ok();
+        var result = await _mediator.Send(new RemoveDictionary(parameters));
+        return Ok(result);
     }
 
     [HttpGet]
     [Route("getDictionaryType")]
-    public async Task<IActionResult> getDictionaryType()
+    public async Task<IActionResult> getDictionaryType([FromQuery] GetDictionaryTypeParameters parameters)
     {
-        return Ok();
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        var result = await _mediator.Send(new GetDictionaryType(parameters));
+        return Ok(result);
     }
 
     [HttpPost]
     [Route("addDictionaryType")]
-    public async Task<IActionResult> addDictionaryType(AddDictionaryTypeParameters parameters)
+    public async Task<IActionResult> addDictionaryType([FromBody] AddDictionaryTypeParameters parameters)
     {
         if (!ModelState.IsValid)
         {
@@ -68,15 +91,14 @@ public class DictionariesController : ControllerBase
 
     [HttpDelete]
     [Route("removeDictionaryType")]
-    public async Task<IActionResult> removeDictionaryType()
+    public async Task<IActionResult> removeDictionaryType([FromBody] RemoveDictionaryTypeParameters parameters)
     {
-        return Ok();
-    }
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
 
-    [HttpPost]
-    [Route("removeDictionaryType")]
-    public async Task<IActionResult> editDictionaryType()
-    {
-        return Ok();
+        var result = await _mediator.Send(new RemoveDictionaryType(parameters));
+        return Ok(result);
     }
 }

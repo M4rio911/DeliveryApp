@@ -17,6 +17,11 @@ public class RemoveCarHandler : ICommandHandler<RemoveCar, RemoveCarResponse>
         var carToRemove = _context.Cars
             .FirstOrDefault(x => x.Id == request.CarId);
 
+        if (carToRemove == null)
+        {
+            return new RemoveCarResponse("Car with passed Id does not exists");
+        }
+
         _context.Cars.Remove(carToRemove);
         await _context.SaveChangesAsync();
 
