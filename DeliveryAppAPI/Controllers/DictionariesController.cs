@@ -1,6 +1,4 @@
-﻿using DeliveryApp.Application.Handlers.Cars.GetCar;
-using DeliveryApp.Application.Handlers.Cars.RemoveCar;
-using DeliveryApp.Application.Handlers.Dictionaries.AddDictionary;
+﻿using DeliveryApp.Application.Handlers.Dictionaries.AddDictionary;
 using DeliveryApp.Application.Handlers.Dictionaries.AddDictionaryType;
 using DeliveryApp.Application.Handlers.Dictionaries.GetDictionary;
 using DeliveryApp.Application.Handlers.Dictionaries.GetDictionaryType;

@@ -1,4 +1,4 @@
-﻿namespace DeliveryApp.Application.Handlers.Currency.RemoveCurrency;
+﻿namespace DeliveryApp.Application.Handlers.Currencies.RemoveCurrency;
 
 public class RemoveCurrencyParameters
 {
