@@ -1,5 +1,4 @@
-﻿using System.Windows.Input;
-using static DeliveryApp.Application.Interfaces.Mediator.ICommand;
+﻿using static DeliveryApp.Application.Interfaces.Mediator.ICommand;
 
 namespace DeliveryApp.Application.Handlers.Cars.AddCar;
 
