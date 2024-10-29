@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Serilog;
-using System.Text;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.LoadAppConfiguration();
@@ -23,50 +24,41 @@ builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-//IDENTITY???
-builder.Services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<DeliveryDbContext>()
-    .AddDefaultTokenProviders();
-
 //JWT
-var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"]);
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.RequireHttpsMetadata = false;
-    options.SaveToken = true;
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateIssuer = false,
-        ValidateAudience = false
-    };
-});
+//var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"]);
+//builder.Services.AddAuthentication(options =>
+//{
+//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+//})
+//.AddJwtBearer(options =>
+//{
+//    options.RequireHttpsMetadata = false;
+//    options.SaveToken = true;
+//    options.TokenValidationParameters = new TokenValidationParameters
+//    {
+//        ValidateIssuerSigningKey = true,
+//        IssuerSigningKey = new SymmetricSecurityKey(key),
+//        ValidateIssuer = false,
+//        ValidateAudience = false
+//    };
+//});
 
 //CORS
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", builder =>
-    {
-        builder
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .WithOrigins("https://localhost:8081/")
-
-            .SetIsOriginAllowed(origin => true)
-            .AllowCredentials()
-            .WithExposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Methods");
-    });
-});
+builder.ConfigureCors();
 
 //SWAGGER
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
 
 //MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ApplicationReferenceAssembly).Assembly));
@@ -76,6 +68,29 @@ builder.Services.AddEntityFrameworkNpgsql().AddDbContext<DeliveryDbContext>(opti
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DeliveryDBConnection"));
 });
+
+//IDENTITY???
+//builder.Services.AddIdentity<User, IdentityRole>()
+//    .AddEntityFrameworkStores<DeliveryDbContext>()
+//    .AddDefaultTokenProviders();
+
+//builder.Services.AddIdentity<User, IdentityRole>(options =>
+//{
+//    options.User.RequireUniqueEmail = true;
+//    options.SignIn.RequireConfirmedEmail = false;
+//})
+//    .AddEntityFrameworkStores<DeliveryDbContext>()
+//    .AddDefaultTokenProviders();
+
+builder.Services.AddIdentityApiEndpoints<User>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+    options.SignIn.RequireConfirmedEmail = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 8;
+})
+    .AddEntityFrameworkStores<DeliveryDbContext>()
+    .AddDefaultTokenProviders();
 
 ////ENTITY
 //builder.Services.AddIdentity<User, Role>()
@@ -93,18 +108,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.MapIdentityApi<User>();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
-//app.UseCors(builder => builder
-//    .SetIsOriginAllowed(origin => true)
-//    .AllowAnyMethod()
-//    .AllowAnyHeader()
-//    .AllowCredentials()
-//    .WithExposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Methods"));
-
 app.UseCors("AllowAll");
-
 app.MapControllers();
 
 app.Run();

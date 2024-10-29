@@ -42,32 +42,4 @@ public class AddressesController : ControllerBase
     {
         return Ok();
     }
-
-    [HttpGet]
-    [Route("getCountry")]
-    public async Task<IActionResult> GetCountry()
-    {
-        return Ok();
-    }
-
-    [HttpPost]
-    [Route("addCountry")]
-    public async Task<IActionResult> AddCountry()
-    {
-        return Ok();
-    }
-
-    [HttpDelete]
-    [Route("removeCountry")]
-    public async Task<IActionResult> RemoveCountry()
-    {
-        return Ok();
-    }
-
-    [HttpPost]
-    [Route("removeCountry")]
-    public async Task<IActionResult> EditCountry()
-    {
-        return Ok();
-    }
 }
