@@ -90,7 +90,8 @@ public class AuthController : ControllerBase
         {
             user.Id,
             user.UserName,
-            user.Email
+            user.Email,
+            user.UserType
         });
     }
 

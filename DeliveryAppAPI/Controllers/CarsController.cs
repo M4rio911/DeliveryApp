@@ -4,6 +4,7 @@ using DeliveryApp.Application.Handlers.Cars.GetCar;
 using DeliveryApp.Application.Handlers.Cars.GetCars;
 using DeliveryApp.Application.Handlers.Cars.RemoveCar;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeliveryApp.API.Controllers;
@@ -11,7 +12,7 @@ namespace DeliveryApp.API.Controllers;
 [Produces("application/json")]
 [Route("[controller]")]
 [ApiController]
-
+[Authorize]
 public class CarsController : ControllerBase
 {
     private readonly IMediator _mediator;

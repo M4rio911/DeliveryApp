@@ -5,6 +5,7 @@ using DeliveryApp.Application.Handlers.Dictionaries.GetDictionaryType;
 using DeliveryApp.Application.Handlers.Dictionaries.RemoveDictionary;
 using DeliveryApp.Application.Handlers.Dictionaries.RemoveDictionaryType;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeliveryApp.API.Controllers;
@@ -12,7 +13,7 @@ namespace DeliveryApp.API.Controllers;
 [Produces("application/json")]
 [Route("dictionaries/[controller]")]
 [ApiController]
-
+[Authorize]
 public class DictionariesController : ControllerBase
 {
     private readonly IMediator _mediator;

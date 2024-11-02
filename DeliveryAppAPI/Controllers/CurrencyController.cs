@@ -4,6 +4,7 @@ using DeliveryApp.Application.Handlers.Currencies.GetCurrencies;
 using DeliveryApp.Application.Handlers.Currencies.GetCurrency;
 using DeliveryApp.Application.Handlers.Currencies.RemoveCurrency;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeliveryApp.API.Controllers;
@@ -11,7 +12,7 @@ namespace DeliveryApp.API.Controllers;
 [Produces("application/json")]
 [Route("[controller]")]
 [ApiController]
-
+[Authorize]
 public class CurrencyController : ControllerBase
 {
     private readonly IMediator _mediator;

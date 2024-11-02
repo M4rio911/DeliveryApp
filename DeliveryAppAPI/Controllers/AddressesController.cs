@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeliveryApp.API.Controllers;
@@ -6,6 +7,7 @@ namespace DeliveryApp.API.Controllers;
 [Produces("application/json")]
 [Route("adddresses/[controller]")]
 [ApiController]
+[Authorize]
 public class AddressesController : ControllerBase
 {
     private readonly IMediator _mediator;
