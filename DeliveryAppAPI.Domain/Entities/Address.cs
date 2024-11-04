@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DeliveryApp.Domain.Entities;
 
-public class Address :AuditableEntity
+public class Address : AuditableEntity
 {
     [Column("AddressId")]
     public int Id { get; set; }

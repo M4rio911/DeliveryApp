@@ -11,8 +11,6 @@ public class Package :AuditableEntity
     public User Sender { get; set; }
     public string ReciverId { get; set; }
     public User Reciver { get; set; }
-    public int CountryId { get; set; }
-    public Country Country { get; set; }
     public int DestinationId { get; set; }
     public Address Destination { get; set; }
     public int PackageTypeId { get; set; }

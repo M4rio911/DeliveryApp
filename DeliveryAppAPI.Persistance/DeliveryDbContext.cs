@@ -18,6 +18,7 @@ public class DeliveryDbContext : IdentityDbContext<User>
     public DbSet<DictionaryType> DictionaryTypes { get; set; }
     public DbSet<Driver> Drivers{ get; set; }
     public DbSet<Package> Packages { get; set; }
+    public DbSet<StoragePackages> StoragePackages { get; set; }
     public DbSet<Payment> Payments { get; set; }
     public DbSet<Transportation> Transportations { get; set; }
     public DbSet<TransportationItem> TransportationItems { get; set; }
@@ -67,6 +68,10 @@ public class DeliveryDbContext : IdentityDbContext<User>
             b.HasKey(c => c.Id);
         });
         builder.Entity<Package>(b =>
+        {
+            b.HasKey(c => c.Id);
+        });
+        builder.Entity<StoragePackages>(b =>
         {
             b.HasKey(c => c.Id);
         });
@@ -138,6 +143,13 @@ public class DeliveryDbContext : IdentityDbContext<User>
             .OnDelete(DeleteBehavior.Restrict);
         #endregion
         #region Payment
+        builder.Entity<Payment>()
+            .HasOne(a => a.Package)
+            .WithMany()
+            .HasForeignKey(a => a.PackageId)
+            .OnDelete(DeleteBehavior.Restrict);
+        #endregion
+        #region Package
         builder.Entity<Package>()
             .HasOne(a => a.Sender)
             .WithMany()
@@ -148,12 +160,6 @@ public class DeliveryDbContext : IdentityDbContext<User>
             .HasOne(a => a.Reciver)
             .WithMany()
             .HasForeignKey(a => a.ReciverId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.Entity<Package>()
-            .HasOne(a => a.Country)
-            .WithMany()
-            .HasForeignKey(a => a.CountryId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.Entity<Package>()
@@ -180,17 +186,18 @@ public class DeliveryDbContext : IdentityDbContext<User>
             .HasForeignKey(a => a.PaymentId)
             .OnDelete(DeleteBehavior.Restrict);
         #endregion
+        #region StoragePackages
+        builder.Entity<StoragePackages>()
+            .HasOne(a => a.Package)
+            .WithMany()
+            .HasForeignKey(a => a.PackageId)
+            .OnDelete(DeleteBehavior.Restrict);
+        #endregion
         #region Transportation
         builder.Entity<Transportation>()
             .HasOne(c => c.AssignedDriver)
             .WithMany()
             .HasForeignKey(l => l.AssignedDriverId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.Entity<Transportation>()
-            .HasOne(c => c.TransportationType)
-            .WithMany()
-            .HasForeignKey(l => l.TransportationTypeId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.Entity<Transportation>()
@@ -206,11 +213,11 @@ public class DeliveryDbContext : IdentityDbContext<User>
             .OnDelete(DeleteBehavior.Restrict);
         #endregion
         #region TransportationItem
-        //builder.Entity<TransportationItem>()
-        //    .HasOne(c => c.Transportation)
-        //    .WithMany()
-        //    .HasForeignKey(l => l.TransportationId)
-        //    .OnDelete(DeleteBehavior.Restrict);
+        builder.Entity<TransportationItem>()
+            .HasOne(c => c.TransportationType)
+            .WithMany()
+            .HasForeignKey(l => l.TransportationTypeId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.Entity<TransportationItem>()
             .HasOne(c => c.Package)

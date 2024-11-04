@@ -7,6 +7,8 @@ public class Payment :AuditableEntity
 {
     [Column("PaymentId")]
     public int Id { get; set; }
+    public int PackageId { get; set; }
+    public Package Package { get; set; }
     public int PaymentTypeId { get; set; }
     public Dictionary PaymentType { get; set; }
     public int PaymentStatusId { get; set; }
