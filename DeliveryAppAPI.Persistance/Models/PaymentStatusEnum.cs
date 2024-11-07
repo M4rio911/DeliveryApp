@@ -3,7 +3,6 @@
 public enum PaymentStatusEnum
 {
     Unpaid,
-    Processing,
-    Paid,
-    CashByRecieve
+    //Processing,
+    Paid
 }

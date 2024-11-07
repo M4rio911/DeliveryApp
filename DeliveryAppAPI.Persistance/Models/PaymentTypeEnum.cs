@@ -3,6 +3,8 @@
 public enum PaymentTypeEnum
 {
     Online,
-    CashWhenDelivered,
-    CashWhenDeliveredWithApprove
+    Cash,
+    Transfer
+    //CashWhenDelivered,
+    //CashWhenDeliveredWithApprove
 }

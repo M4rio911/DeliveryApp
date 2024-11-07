@@ -2,8 +2,8 @@
 
 public enum TransportationTypeEnum
 {
-    PackageAutomat,
-    MailBox,
-    Courier,
-    CourierWithApprove
+    //PackageAutomat,
+    //MailBox,
+    //Courier,
+    //CourierWithApprove
 }

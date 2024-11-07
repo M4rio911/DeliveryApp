@@ -2,8 +2,9 @@
 
 public enum PackageTypeEnum
 {
-    Mail,
+    Letter,
     Small,
     Medium,
-    Large
+    Large,
+    XL
 }

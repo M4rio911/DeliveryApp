@@ -3,8 +3,9 @@
 public enum UserTypeEnum
 {
     Guest,
-    BaseUser,
-    Courier,
-    HelpDesk,
-    Administrator
+    Client,
+    Delivery,
+    DeliveryManager,
+    Support,
+    Admin
 }
