@@ -1,11 +1,11 @@
 using DeliveryApp.API.Configuration;
 using DeliveryApp.Application;
+using DeliveryApp.Application.Interfaces.Repositories;
 using DeliveryApp.Domain.Entities;
+using DeliveryApp.Infrastructure.Repositories;
 using DeliveryApp.Persistance;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Swashbuckle.AspNetCore.Filters;
@@ -24,6 +24,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddScoped<IDictionaryRepository, DictionaryRepository>();
 //JWT
 //var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"]);
 //builder.Services.AddAuthentication(options =>

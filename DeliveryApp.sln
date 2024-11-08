@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeliveryApp.API", "DeliveryAppAPI\DeliveryApp.API.csproj", "{614D0299-400C-4CCE-A739-6190F1F59DCC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5E6644D9-682C-45F9-8BFE-810EDE741702} = {5E6644D9-682C-45F9-8BFE-810EDE741702}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeliveryApp.Domain", "DeliveryAppAPI.Domain\DeliveryApp.Domain.csproj", "{46493383-73EC-40BE-BAFB-34C32141F114}"
 EndProject
