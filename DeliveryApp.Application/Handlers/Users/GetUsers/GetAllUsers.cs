@@ -4,7 +4,7 @@ namespace DeliveryApp.Application.Handlers.Users.GetAllUsers;
 
 public class GetAllUsers : IQuery<GetAllUsersResponse>
 {
-    public GetAllUsers(GetAllUsersParameters param)
+    public GetAllUsers()
     {
            
     }

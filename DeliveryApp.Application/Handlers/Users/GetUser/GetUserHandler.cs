@@ -1,23 +1,20 @@
-﻿using DeliveryApp.Application.Dto.Cars;
-using DeliveryApp.Application.Dto.Users;
-using DeliveryApp.Application.Handlers.Cars.GetCars;
+﻿using DeliveryApp.Application.Dto.Users;
 using DeliveryApp.Application.Interfaces.Mediator;
 using DeliveryApp.Persistance;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
-namespace DeliveryApp.Application.Handlers.Users.GetAllUsers;
+namespace DeliveryApp.Application.Handlers.Users.GetUser;
 
-public class GetAllUsersHandler : IQueryHandler<GetAllUsers, GetAllUsersResponse>
+public class GetUserHandler : IQueryHandler<GetUser, GetUserResponse>
 {
     private readonly DeliveryDbContext _context;
 
-    public GetAllUsersHandler(DeliveryDbContext deliveryDbContext)
+    public GetUserHandler(DeliveryDbContext deliveryDbContext)
     {
         _context = deliveryDbContext;
     }
 
-    public async Task<GetAllUsersResponse> Handle(GetAllUsers request, CancellationToken cancellationToken)
+    public async Task<GetUserResponse> Handle(GetUser request, CancellationToken cancellationToken)
     {
         var response = await _context.Users
             .Select(x => new GetUserDto()
@@ -31,13 +28,12 @@ public class GetAllUsersHandler : IQueryHandler<GetAllUsers, GetAllUsersResponse
                 UserType = x.UserTypeId,
                 PhoneNumber = x.PhoneNumber
             })
-            .OrderByDescending(x => x.ActiveStatus)
-            .ThenBy(x => x.UserName)
-            .ToListAsync();
+            .Where(x => x.Id == request.UserId)
+            .FirstOrDefaultAsync();
 
-        return new GetAllUsersResponse()
+        return new GetUserResponse()
         {
-            Users = response
+            User = response
         };
     }
 

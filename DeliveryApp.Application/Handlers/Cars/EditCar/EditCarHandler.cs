@@ -1,5 +1,4 @@
 ﻿using DeliveryApp.Application.Interfaces.Mediator;
-using DeliveryApp.Domain.Entities;
 using DeliveryApp.Persistance;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,7 +6,6 @@ namespace DeliveryApp.Application.Handlers.Cars.EditCar;
 
 public class EditCarHandler : ICommandHandler<EditCar, EditCarResponse>
 {
-    //private readonly 
     private readonly DeliveryDbContext _context;
 
     public EditCarHandler(DeliveryDbContext deliveryDbContext)
