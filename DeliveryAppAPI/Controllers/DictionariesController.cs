@@ -2,6 +2,7 @@
 using DeliveryApp.Application.Handlers.Dictionaries.AddDictionaryType;
 using DeliveryApp.Application.Handlers.Dictionaries.GetDictionary;
 using DeliveryApp.Application.Handlers.Dictionaries.GetDictionaryType;
+using DeliveryApp.Application.Handlers.Dictionaries.GetDictionaryTypes;
 using DeliveryApp.Application.Handlers.Dictionaries.RemoveDictionary;
 using DeliveryApp.Application.Handlers.Dictionaries.RemoveDictionaryType;
 using MediatR;
@@ -11,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DeliveryApp.API.Controllers;
 
 [Produces("application/json")]
-[Route("dictionaries/[controller]")]
+[Route("[controller]")]
 [ApiController]
 [Authorize]
 public class DictionariesController : ControllerBase
@@ -72,6 +73,19 @@ public class DictionariesController : ControllerBase
         }
 
         var result = await _mediator.Send(new GetDictionaryType(parameters));
+        return Ok(result);
+    }
+
+    [HttpGet]
+    [Route("getDictionaryTypes")]
+    public async Task<IActionResult> getDictionaryTypes()
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        var result = await _mediator.Send(new GetDictionaryTypes());
         return Ok(result);
     }
 
