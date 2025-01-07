@@ -1,15 +1,18 @@
 ﻿using DeliveryApp.Application.Interfaces.Mediator;
 using DeliveryApp.Persistance;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeliveryApp.Application.Handlers.Cars.EditCar;
 
 public class EditCarHandler : ICommandHandler<EditCar, EditCarResponse>
 {
+    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly DeliveryDbContext _context;
 
-    public EditCarHandler(DeliveryDbContext deliveryDbContext)
+    public EditCarHandler(IHttpContextAccessor httpContextAccessor, DeliveryDbContext deliveryDbContext)
     {
+        _httpContextAccessor = httpContextAccessor;
         _context = deliveryDbContext;
     }
 
@@ -22,6 +25,12 @@ public class EditCarHandler : ICommandHandler<EditCar, EditCarResponse>
         if(dbCar == null) 
             return new EditCarResponse("No car was found under passed ID");
 
+        var user = _httpContextAccessor.HttpContext?.User.Identities.FirstOrDefault().Name;
+        if (user == null)
+        {
+            throw new UnauthorizedAccessException("User is not authenticated");
+        }
+
         dbCar.Brand = request.Brand;
         dbCar.Model = request.Model;
         dbCar.HorsePower = request.HorsePower;
@@ -30,9 +39,7 @@ public class EditCarHandler : ICommandHandler<EditCar, EditCarResponse>
         dbCar.Seats = request.Seats;
         dbCar.MaxLoad = request.MaxLoad;
         dbCar.Modified = DateTime.UtcNow;
-        
-        //User to do 
-        dbCar.ModifiedBy = "ModifiedUser";
+        dbCar.ModifiedBy = user;
 
         await _context.SaveChangesAsync(cancellationToken);
 

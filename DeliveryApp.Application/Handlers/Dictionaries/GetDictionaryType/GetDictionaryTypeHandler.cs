@@ -1,5 +1,4 @@
-﻿using DeliveryApp.Application.Dto.Cars;
-using DeliveryApp.Application.Dto.Dictionaries;
+﻿using DeliveryApp.Application.Dto.Dictionaries;
 using DeliveryApp.Application.Interfaces.Mediator;
 using DeliveryApp.Persistance;
 using Microsoft.EntityFrameworkCore;

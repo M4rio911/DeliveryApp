@@ -2,5 +2,6 @@
 
 public class RemoveDictionaryParameters
 {
-    public int Id { get; set; }
+    public int DictionaryTypeId { get; set; }
+    public int DictionaryId { get; set; }
 }

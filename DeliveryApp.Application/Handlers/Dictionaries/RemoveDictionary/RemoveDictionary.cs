@@ -4,9 +4,11 @@ namespace DeliveryApp.Application.Handlers.Dictionaries.RemoveDictionary;
 
 public class RemoveDictionary : ICommand<RemoveDictionaryResponse>
 {
-    public int Id { get; set; }
+    public int DictionaryTypeId { get; set; }
+    public int DictionaryId { get; set; }
     public RemoveDictionary(RemoveDictionaryParameters parameters)
     {
-        Id = parameters.Id;
+        DictionaryId = parameters.DictionaryId;
+        DictionaryTypeId = parameters.DictionaryTypeId;
     }
 }

@@ -16,7 +16,9 @@ public class RemoveDictionaryHandler : IRequestHandler<RemoveDictionary, RemoveD
     public async Task<RemoveDictionaryResponse> Handle(RemoveDictionary request, CancellationToken cancellationToken)
     {
         var dictionaryToRemove = _context.Dictionaries
-            .FirstOrDefault(x => x.Id == request.Id);
+            .FirstOrDefault(x => 
+                x.Id == request.DictionaryId && 
+                x.DictionaryTypeId == request.DictionaryTypeId);
 
         if (dictionaryToRemove == null)
         {

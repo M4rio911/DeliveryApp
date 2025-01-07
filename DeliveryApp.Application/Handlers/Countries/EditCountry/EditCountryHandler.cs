@@ -1,17 +1,19 @@
 ﻿using DeliveryApp.Application.Interfaces.Mediator;
 using DeliveryApp.Domain.Entities;
 using DeliveryApp.Persistance;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeliveryApp.Application.Handlers.Countries.EditCountry;
 
 public class EditCountryHandler : ICommandHandler<EditCountry, EditCountryResponse>
 {
-    //private readonly 
+    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly DeliveryDbContext _context;
 
-    public EditCountryHandler(DeliveryDbContext deliveryDbContext)
+    public EditCountryHandler(IHttpContextAccessor httpContextAccessor, DeliveryDbContext deliveryDbContext)
     {
+        _httpContextAccessor = httpContextAccessor;
         _context = deliveryDbContext;
     }
 
@@ -24,13 +26,17 @@ public class EditCountryHandler : ICommandHandler<EditCountry, EditCountryRespon
         if(dbCountry == null) 
             return new EditCountryResponse("No Country was found under passed ID");
 
+        var user = _httpContextAccessor.HttpContext?.User.Identities.FirstOrDefault().Name;
+        if (user == null)
+        {
+            throw new UnauthorizedAccessException("User is not authenticated");
+        }
+
         dbCountry.Name = request.Name;
         dbCountry.Code = request.Code;
         dbCountry.CurrencyId = request.CurrencyId;
         dbCountry.Modified = DateTime.UtcNow;
-        
-        //User to do 
-        dbCountry.ModifiedBy = "ModifiedUser";
+        dbCountry.ModifiedBy = user;
 
         await _context.SaveChangesAsync(cancellationToken);
 
