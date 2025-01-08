@@ -20,9 +20,12 @@ public class GetCurrenciesHandler : IQueryHandler<GetCurrencies, GetCurrenciesRe
         var response = await _context.Currencies
             .Select(x => new GetCurrencyDto() 
             {
+                Id = x.Id,
                 Shortcut = x.Shortcut,
                 Name = x.Name
-            }).ToListAsync();
+            })
+            .OrderBy(x => x.Id)
+            .ToListAsync();
 
         return new GetCurrenciesResponse()
         {

@@ -13,11 +13,11 @@ namespace DeliveryApp.API.Controllers;
 [Route("[controller]")]
 [ApiController]
 [Authorize]
-public class CurrencyController : ControllerBase
+public class CurrenciesController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public CurrencyController(IMediator mediator)
+    public CurrenciesController(IMediator mediator)
     {
         _mediator = mediator;
     }

@@ -11,6 +11,7 @@ public class EditCurrencyResponse : BaseResponse
     {
         Currency = new GetCurrencyDto
         {
+            Id = currency.Id,
             Name = currency.Name,
             Shortcut = currency.Shortcut
         };

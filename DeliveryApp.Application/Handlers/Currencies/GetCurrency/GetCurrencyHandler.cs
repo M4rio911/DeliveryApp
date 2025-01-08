@@ -20,6 +20,7 @@ public class GetCurrencyHandler : IQueryHandler<GetCurrency, GetCurrencyResponse
             .Where(x => x.Id == request.CurrencyId)
             .Select(x => new GetCurrencyDto() 
             {
+                Id = x.Id,
                 Shortcut = x.Shortcut,
                 Name = x.Name,
             }).FirstOrDefaultAsync(cancellationToken);
