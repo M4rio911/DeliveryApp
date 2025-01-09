@@ -20,13 +20,14 @@ public class GetCountryHandler : IQueryHandler<GetCountry, GetCountryResponse>
             .Where(x => x.Id == request.CountryId)
             .Select(x => new GetCountryDto() 
             {
+                Id = x.Id,
                 Name = x.Name,
                 Code = x.Code,
                 CurrencyId = x.CurrencyId
             }).FirstOrDefaultAsync(cancellationToken);
 
         if (response == null)
-            return new GetCountryResponse("No Currency was found under passed Id");
+            return new GetCountryResponse("No country was found under passed Id");
 
         return new GetCountryResponse()
         {

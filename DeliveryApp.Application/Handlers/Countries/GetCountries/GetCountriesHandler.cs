@@ -19,6 +19,7 @@ public class GetCountriesHandler : IQueryHandler<GetCountries, GetCountriesRespo
         var response = await _context.Countries
             .Select(x => new GetCountryDto() 
             {
+                Id = x.Id,
                 Name = x.Name,
                 Code = x.Code,
                 CurrencyId = x.CurrencyId

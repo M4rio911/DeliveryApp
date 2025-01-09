@@ -1,8 +1,8 @@
 ﻿using DeliveryApp.Application.Handlers.Countries.AddCountry;
 using DeliveryApp.Application.Handlers.Countries.EditCountry;
+using DeliveryApp.Application.Handlers.Countries.GetCountries;
 using DeliveryApp.Application.Handlers.Countries.GetCountry;
 using DeliveryApp.Application.Handlers.Countries.RemoveCountry;
-using DeliveryApp.Application.Handlers.Currencies.GetCurrencies;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,25 +13,25 @@ namespace DeliveryApp.API.Controllers;
 [Route("[controller]")]
 [ApiController]
 [Authorize]
-public class CountryController : ControllerBase
+public class CountriesController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public CountryController(IMediator mediator)
+    public CountriesController(IMediator mediator)
     {
         _mediator = mediator;
     }
 
     [HttpGet]
-    [Route("getCurrencies")]
-    public async Task<IActionResult> GetCurrencies()
+    [Route("getCountries")]
+    public async Task<IActionResult> GetCountries()
     {
         if (!ModelState.IsValid)
         {
             return BadRequest();
         }
 
-        var result = await _mediator.Send(new GetCurrencies());
+        var result = await _mediator.Send(new GetCountries());
         return Ok(result);
     }
 
