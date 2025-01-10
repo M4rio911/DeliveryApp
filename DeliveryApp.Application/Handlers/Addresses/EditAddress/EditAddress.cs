@@ -4,7 +4,7 @@ namespace DeliveryApp.Application.Handlers.Addresses.EditAddress;
 
 public class EditAddress : ICommand<EditAddressResponse>
 {
-    public int AddressId { get; set; }
+    public int Id { get; set; }
     public string Name { get; set; }
     public int? CountryId { get; set; }
     public string PostCode { get; set; }
@@ -15,7 +15,8 @@ public class EditAddress : ICommand<EditAddressResponse>
 
     public EditAddress(EditAddressParameters parameters)
     {
-        AddressId = parameters.AddressId;
+        Id = parameters.Id;
+        Name = parameters.Name;
         CountryId = parameters.CountryId;
         PostCode = parameters.PostCode;
         City = parameters.City;

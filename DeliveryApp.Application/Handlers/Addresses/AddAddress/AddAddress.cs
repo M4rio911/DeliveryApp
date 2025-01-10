@@ -4,7 +4,6 @@ namespace DeliveryApp.Application.Handlers.Addresses.AddAddress;
 
 public class AddAddress : ICommand<AddAddressResponse>
 {
-    public string UserId { get; set; }
     public string Name { get; set; }
     public int? CountryId { get; set; }
     public string PostCode { get; set; }
@@ -15,7 +14,6 @@ public class AddAddress : ICommand<AddAddressResponse>
 
     public AddAddress(AddAddressParameters parameters)
     {
-        UserId = parameters.UserId;
         Name = parameters.Name;
         CountryId = parameters.CountryId;
         PostCode = parameters.PostCode;

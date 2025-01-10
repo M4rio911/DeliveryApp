@@ -20,7 +20,7 @@ public class EditAddressHandler : ICommandHandler<EditAddress, EditAddressRespon
     public async Task<EditAddressResponse> Handle(EditAddress request, CancellationToken cancellationToken)
     {
         var dbAddress = await _context.Address
-            .Where(x => x.Id == request.AddressId)
+            .Where(x => x.Id == request.Id)
             .FirstOrDefaultAsync(cancellationToken);
             
         if(dbAddress == null) 

@@ -20,7 +20,7 @@ public class GetAddressHandler : IQueryHandler<GetAddress, GetAddressResponse>
             .Where(x => x.Id == request.AddressId)
             .Select(x => new GetAddressDto() 
             {
-                AddressId = x.Id,
+                Id = x.Id,
                 Name = x.Name,
                 CountryId = x.CountryId,
                 PostCode = x.PostCode,

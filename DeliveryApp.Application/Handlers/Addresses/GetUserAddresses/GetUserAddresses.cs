@@ -4,9 +4,8 @@ namespace DeliveryApp.Application.Handlers.Addresses.GetUserAddresses;
 
 public class GetUserAddresses : IQuery<GetUserAddressesResponse>
 {
-    public string UserId { get; set; }
-    public GetUserAddresses(GetUserAddressesParameters parameters)
+    public GetUserAddresses()
     {
-        UserId = parameters.UserId;
+
     }
 }

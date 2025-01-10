@@ -2,6 +2,7 @@
 using DeliveryApp.Domain.Entities;
 using DeliveryApp.Persistance;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace DeliveryApp.Application.Handlers.Addresses.AddAddress;
 
@@ -18,7 +19,9 @@ public class AddAddressHandler : ICommandHandler<AddAddress, AddAddressResponse>
 
     public async Task<AddAddressResponse> Handle(AddAddress request, CancellationToken cancellationToken)
     {
-        var user = _httpContextAccessor.HttpContext?.User.Identities.FirstOrDefault().Name;
+        var user = _httpContextAccessor.HttpContext?.User;
+        var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userName = user.Identities.FirstOrDefault().Name;
 
         if (user == null)
         {
@@ -27,7 +30,7 @@ public class AddAddressHandler : ICommandHandler<AddAddress, AddAddressResponse>
 
         var newAddress = new Address
         {
-            UserId = request.UserId,
+            UserId = userId,
             Name = request.Name,
             CountryId = request.CountryId,
             PostCode = request.PostCode,
@@ -36,8 +39,8 @@ public class AddAddressHandler : ICommandHandler<AddAddress, AddAddressResponse>
             Number = request.Number,
             AddressTypeId = request.AddressTypeId,
             Created = DateTime.UtcNow,
-            CreatedBy = user,
-            ModifiedBy = user
+            CreatedBy = userName,
+            ModifiedBy = userName
         };
 
 

@@ -11,9 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace DeliveryApp.API.Controllers;
 
 [Produces("application/json")]
-[Route("adddresses/[controller]")]
+[Route("[controller]")]
 [ApiController]
-//[Authorize]
+[Authorize]
 public class AddressesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -38,14 +38,14 @@ public class AddressesController : ControllerBase
 
     [HttpGet]
     [Route("getUserAddresses")]
-    public async Task<IActionResult> GetUserAddresses([FromQuery] GetUserAddressesParameters parameters)
+    public async Task<IActionResult> GetUserAddresses()
     {
         if (!ModelState.IsValid)
         {
             return BadRequest();
         }
 
-        var result = await _mediator.Send(new GetUserAddresses(parameters));
+        var result = await _mediator.Send(new GetUserAddresses());
         return Ok(result);
     }
 
@@ -76,7 +76,7 @@ public class AddressesController : ControllerBase
     }
 
     [HttpPost]
-    [Route("removeAddress")]
+    [Route("editAddress")]
     public async Task<IActionResult> EditAddress([FromBody] EditAddressParameters parameters)
     {
         if (!ModelState.IsValid)
