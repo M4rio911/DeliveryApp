@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DeliveryApp.Domain.Entities;
 
-public class Package :AuditableEntity
+public class Package : AuditableEntity
 {
     [Column("PackageId")]
     public int Id { get; set; }

@@ -2,7 +2,7 @@
 
 namespace DeliveryApp.Domain.Entities;
 
-public class StoragePackages : AuditableEntity
+public class StoragePackagesLog : AuditableEntity
 {
     public int Id { get; set; }
     public int PackageId { get; set; }

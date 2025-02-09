@@ -10,7 +10,7 @@ public class AuditableEntity
     public DateTime Created { get; set; }
 
     [MaxLength(150)]
-    public string ModifiedBy { get; set; } = default!;
+    public string? ModifiedBy { get; set; } = default!;
 
     public DateTime? Modified { get; set; }
 }

@@ -8,8 +8,8 @@ public class Address : AuditableEntity
     [Column("AddressId")]
     public int Id { get; set; }
     public string Name { get; set; }
-    public string UserId { get; set; }
-    public User User { get; set; }
+    public string? UserId { get; set; }
+    public User? User { get; set; }
     public int? CountryId { get; set; }
     public Country Country { get; set; }
     public string PostCode { get; set; }
@@ -18,4 +18,5 @@ public class Address : AuditableEntity
     public string Number { get; set; }
     public int AddressTypeId { get; set; }
     public Dictionary AddressType {  get; set; }
+    public bool GuestAddress { get; set; }
 }

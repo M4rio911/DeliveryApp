@@ -2,9 +2,7 @@
 
 public enum PaymentTypeEnum
 {
-    Online,
-    Cash,
-    Transfer
-    //CashWhenDelivered,
-    //CashWhenDeliveredWithApprove
+    Card,
+    Blik,
+    BankTransfer
 }
