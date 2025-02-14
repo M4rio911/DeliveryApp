@@ -25,7 +25,7 @@ public class GetPaymentHandler : IQueryHandler<GetPayment, GetPaymentResponse>
             .Select(x => new GetPaymentDto()
             {
                 Id = x.Id,
-                PackageId = x.PackageId,
+                PackageId = x.Id,
                 PaymentTypeId = x.PaymentTypeId,
                 PaymentStatusId = x.PaymentStatusId,
             }).FirstOrDefaultAsync(cancellationToken);

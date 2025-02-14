@@ -20,11 +20,11 @@ public class GetPaymentByPackageIdHandler : IQueryHandler<GetPaymentByPackageId,
     public async Task<GetPaymentByPackageIdResponse> Handle(GetPaymentByPackageId request, CancellationToken cancellationToken)
     {
         var response = await _context.Payments
-            .Where(x => x.PackageId == request.PackageId)
+            .Where(x => x.Id == request.PackageId)
             .Select(x => new GetPaymentDto()
             {
                 Id = x.Id,
-                PackageId = x.PackageId,
+                PackageId = x.Id,
                 PaymentTypeId = x.PaymentTypeId,
                 PaymentStatusId = x.PaymentStatusId,
             }).FirstOrDefaultAsync(cancellationToken);

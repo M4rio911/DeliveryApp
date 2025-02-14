@@ -14,15 +14,15 @@ public class RemoveCountryHandler : ICommandHandler<RemoveCountry, RemoveCountry
 
     public async Task<RemoveCountryResponse> Handle(RemoveCountry request, CancellationToken cancellationToken)
     {
-        var carToRemove = _context.Countries
+        var countryToRemove = _context.Countries
             .FirstOrDefault(x => x.Id == request.CountryId);
 
-        if (carToRemove == null)
+        if (countryToRemove == null)
         {
             return new RemoveCountryResponse("Country with passed Id does not exists");
         }
 
-        _context.Countries.Remove(carToRemove);
+        _context.Countries.Remove(countryToRemove);
         await _context.SaveChangesAsync(cancellationToken);
 
         return new RemoveCountryResponse();

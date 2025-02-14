@@ -32,7 +32,6 @@ public class AddPaymentHandler : ICommandHandler<AddPayment, AddPaymentResponse>
 
         var newPayment = new Payment
         {
-            PackageId = request.PackageId,
             PaymentTypeId = request.PaymentTypeId,
             PaymentStatusId = unpaidStatus,
             Created = DateTime.UtcNow,
