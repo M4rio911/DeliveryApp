@@ -67,6 +67,17 @@ public class DictionaryRepository : DeliveryDbContextFactory, IDictionaryReposit
             .FirstOrDefaultAsync();
     }
 
+    public async Task<Dictionary> GetDictionary(string type, int dictionaryId)
+    {
+        var context = CreateNewInstance(_options);
+
+        return await context.Dictionaries
+            .Include(d => d.DictionaryType)
+            .Where(d => d.DictionaryType.Name.Equals(type) && d.Id == dictionaryId)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<Dictionary> GetDefaultDictionaryNTAsync(string type)
     {
         var context = CreateNewInstance(_options);

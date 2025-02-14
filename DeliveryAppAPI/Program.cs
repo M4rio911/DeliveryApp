@@ -26,6 +26,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<IDictionaryRepository, DictionaryRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 //JWT
 //var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"]);
 //builder.Services.AddAuthentication(options =>
@@ -82,7 +85,7 @@ builder.Services.AddEntityFrameworkNpgsql().AddDbContext<DeliveryDbContext>(opti
 //    options.SignIn.RequireConfirmedEmail = false;
 //})
 //    .AddEntityFrameworkStores<DeliveryDbContext>()
-//    .AddDefaultTokenProviders();
+////    .AddDefaultTokenProviders();
 
 builder.Services.AddIdentityApiEndpoints<User>(options =>
 {
