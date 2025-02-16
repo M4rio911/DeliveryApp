@@ -2,7 +2,7 @@
 
 public class AddAddressParameters
 {
-    public string Name { get; set; }
+    public string? Name { get; set; }
     public int? CountryId { get; set; }
     public string PostCode { get; set; }
     public string City { get; set; }

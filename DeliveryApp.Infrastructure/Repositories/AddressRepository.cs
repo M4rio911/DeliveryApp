@@ -16,7 +16,7 @@ public class AddressRepository : DeliveryDbContextFactory, IAddressRepository
         _httpContextAccessor = httpContextAccessor;
         _options = options;
     }
-    public async Task<Address> AddGuestAddress(AddAddressParameters address)
+    public async Task<Address> AddGuestAddress(AddAddressParameters address, string userName)
     {
         var context = CreateNewInstance(_options);
 
@@ -32,8 +32,7 @@ public class AddressRepository : DeliveryDbContextFactory, IAddressRepository
             AddressTypeId = address.AddressTypeId,
             GuestAddress = true,
             Created = DateTime.UtcNow,
-            CreatedBy = "GuestAddress",
-            ModifiedBy = "GuestAddress"
+            CreatedBy = userName
         };
 
         context.Address.Add(newAddress);

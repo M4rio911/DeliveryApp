@@ -20,13 +20,12 @@ public class AddAddressHandler : ICommandHandler<AddAddress, AddAddressResponse>
     public async Task<AddAddressResponse> Handle(AddAddress request, CancellationToken cancellationToken)
     {
         var user = _httpContextAccessor.HttpContext?.User;
-        var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var userName = user.Identities.FirstOrDefault().Name;
-
         if (user == null)
         {
             throw new UnauthorizedAccessException("User is not authenticated");
         }
+        var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userName = user.Identities.FirstOrDefault().Name;
 
         var newAddress = new Address
         {
@@ -38,6 +37,7 @@ public class AddAddressHandler : ICommandHandler<AddAddress, AddAddressResponse>
             Street = request.Street,
             Number = request.Number,
             AddressTypeId = request.AddressTypeId,
+            GuestAddress = false,
             Created = DateTime.UtcNow,
             CreatedBy = userName,
             ModifiedBy = userName

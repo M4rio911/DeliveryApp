@@ -22,7 +22,9 @@ public class GetDictionaryTypesHandler : IQueryHandler<GetDictionaryTypes, GetDi
             {
                 Id = x.Id,
                 Name = x.Name
-            }).ToListAsync(cancellationToken);
+            })
+            .OrderBy(x => x.Name)
+            .ToListAsync(cancellationToken);
 
         if (response == null)
             return new GetDictionaryTypesResponse("No DictionaryTypes was found");

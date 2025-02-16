@@ -2,17 +2,17 @@
 
 public enum PackageStatusEnum
 {
-    Ordered,
+    New,
     Paid,
-
-    ToCollect,
-    CollectedFromSender,
-    CentralWarehouse,
-    WayToFinalDestination,
+    Posted,
+    Collected,
+    Storage,
+    IssuedToDelivery,
+    InDelivery,
     Delivered,
+    Completed
 
-    Delayed,
-    ReturnedToSender,
-    Cancelled,
-    Lost
+    //ReturnedToSender,
+    //Cancelled,
+    //Lost
 }

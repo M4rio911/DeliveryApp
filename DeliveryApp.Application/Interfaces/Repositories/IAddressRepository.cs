@@ -5,5 +5,5 @@ namespace DeliveryApp.Application.Interfaces.Repositories;
 
 public interface IAddressRepository
 {
-    Task<Address> AddGuestAddress(AddAddressParameters address);
+    Task<Address> AddGuestAddress(AddAddressParameters address, string userName);
 }
