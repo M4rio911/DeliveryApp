@@ -86,6 +86,9 @@ public class AddPackageHandler : ICommandHandler<AddPackage, AddPackageResponse>
         _context.Packages.Add(newPackage);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return new AddPackageResponse();
+        return new AddPackageResponse() 
+        { 
+            NewPackageId = newPackage.Id
+        };
     }
 }

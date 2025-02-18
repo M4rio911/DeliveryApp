@@ -70,6 +70,7 @@ public class PaymentsController : ControllerBase
         }
 
         var result = await _mediator.Send(new SetPaymentAsPaid(parameters));
+        Thread.Sleep(2000);
         return Ok(result);
     }
 

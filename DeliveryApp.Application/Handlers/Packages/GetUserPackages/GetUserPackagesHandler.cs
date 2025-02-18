@@ -37,6 +37,7 @@ public class GetUserPackagesHandler : IQueryHandler<GetUserPackages, GetUserPack
                 ReciverEmail = x.Reciver.Email,
                 PackageStatusId = x.PackageStatusId,
                 PackageTypeId = x.PackageTypeId,
+                PaymentId = x.PaymentId,
             }).ToListAsync(cancellationToken);
 
         return new GetUserPackagesResponse()

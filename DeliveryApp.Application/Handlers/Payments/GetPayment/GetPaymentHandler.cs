@@ -25,16 +25,14 @@ public class GetPaymentHandler : IQueryHandler<GetPayment, GetPaymentResponse>
             .Select(x => new GetPaymentDto()
             {
                 Id = x.Id,
-                PackageId = x.Id,
                 PaymentTypeId = x.PaymentTypeId,
                 PaymentStatusId = x.PaymentStatusId,
+                CurrencyId = x.CurrencyId,
+                Price = x.Price
             }).FirstOrDefaultAsync(cancellationToken);
 
         if (response == null)
             return new GetPaymentResponse("No payment was found under passed Id");
-
-        response.PaymentStatus = (await _dictionaryRepository.GetByIdNTAsync(response.PaymentStatusId)).Name;
-        response.PaymentType = (await _dictionaryRepository.GetByIdNTAsync(response.PaymentTypeId)).Name;
 
         return new GetPaymentResponse()
         {
