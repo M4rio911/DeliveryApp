@@ -1,8 +1,7 @@
 ﻿using DeliveryApp.Application.Interfaces.Mediator;
 using DeliveryApp.Application.Interfaces.Repositories;
-using DeliveryApp.Domain.Entities;
+using DeliveryApp.Infrastructure.Models;
 using DeliveryApp.Persistance;
-using DeliveryApp.Persistance.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 

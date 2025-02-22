@@ -22,7 +22,6 @@
   <ItemGroup>
     <ProjectReference Include="..\DeliveryApp.Application\DeliveryApp.Application.csproj" />
     <ProjectReference Include="..\DeliveryApp.Infrastructure\DeliveryApp.Infrastructure.csproj" />
-    <ProjectReference Include="..\DeliveryAppAPI.Persistance\DeliveryApp.Persistance.csproj" />
   </ItemGroup>
 
 </Project>

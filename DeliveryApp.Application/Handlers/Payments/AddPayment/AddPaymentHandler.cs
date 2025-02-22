@@ -2,7 +2,7 @@
 using DeliveryApp.Application.Interfaces.Repositories;
 using DeliveryApp.Domain.Entities;
 using DeliveryApp.Persistance;
-using DeliveryApp.Persistance.Models;
+using DeliveryApp.Infrastructure.Models;
 using Microsoft.AspNetCore.Http;
 
 namespace DeliveryApp.Application.Handlers.Payments.AddPayment;
@@ -22,7 +22,7 @@ public class AddPaymentHandler : ICommandHandler<AddPayment, AddPaymentResponse>
 
     public async Task<AddPaymentResponse> Handle(AddPayment request, CancellationToken cancellationToken)
     {
-        var unpaidStatus = (await _dictionaryRepository.GetDefaultDictionaryNTAsync(DictionaryTypeEnum.PaymentStatus.ToString())).Id;
+        var unpaidStatus = (await _dictionaryRepository.GetDictionary(DictionaryTypeEnum.PaymentStatus.ToString(), PaymentStatusEnum.Unpaid.ToString())).Id;
 
         var user = _httpContextAccessor.HttpContext?.User.Identities.FirstOrDefault().Name;
         if (user == null)
@@ -38,7 +38,6 @@ public class AddPaymentHandler : ICommandHandler<AddPayment, AddPaymentResponse>
             CreatedBy = user,
             ModifiedBy = user
         };
-
 
         _context.Payments.Add(newPayment);
         await _context.SaveChangesAsync(cancellationToken);

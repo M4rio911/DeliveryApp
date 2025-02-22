@@ -2,7 +2,6 @@
 using DeliveryApp.Application.Interfaces.Mediator;
 using DeliveryApp.Application.Interfaces.Repositories;
 using DeliveryApp.Persistance;
-using DeliveryApp.Persistance.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeliveryApp.Application.Handlers.Payments.GetPayment;

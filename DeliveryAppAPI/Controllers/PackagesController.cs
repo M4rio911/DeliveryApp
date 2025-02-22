@@ -1,6 +1,8 @@
 ﻿using DeliveryApp.Application.Handlers.Packages.AddPackage;
+using DeliveryApp.Application.Handlers.Packages.GetPackage;
 using DeliveryApp.Application.Handlers.Packages.GetPackages;
 using DeliveryApp.Application.Handlers.Packages.GetUserPackages;
+using DeliveryApp.Application.Handlers.Packages.SendPackage;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -46,18 +48,18 @@ public class PackagesController : ControllerBase
         return Ok(result);
     }
 
-    //[HttpGet]
-    //[Route("getPackage")]
-    //public async Task<IActionResult> GetPackage([FromQuery] GetPackageParameters parameters)
-    //{
-    //    if (!ModelState.IsValid)
-    //    {
-    //        return BadRequest();
-    //    }
+    [HttpGet]
+    [Route("getPackage")]
+    public async Task<IActionResult> GetPackage([FromQuery] GetPackageParameters parameters)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
 
-    //    var result = await _mediator.Send(new GetPackage(parameters));
-    //    return Ok(result);
-    //}
+        var result = await _mediator.Send(new GetPackage(parameters));
+        return Ok(result);
+    }
 
     [HttpPost]
     [Route("addPackage")]
@@ -69,6 +71,19 @@ public class PackagesController : ControllerBase
         }
 
         var result = await _mediator.Send(new AddPackage(parameters));
+        return Ok(result);
+    }
+
+    [HttpPost]
+    [Route("sendPackage")]
+    public async Task<IActionResult> SendPackage([FromBody] SendPackageParameters parameters)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        var result = await _mediator.Send(new SendPackage(parameters));
         return Ok(result);
     }
 

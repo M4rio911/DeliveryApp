@@ -2,7 +2,7 @@
 using DeliveryApp.Application.Interfaces.Repositories;
 using DeliveryApp.Domain.Entities;
 using DeliveryApp.Persistance;
-using DeliveryApp.Persistance.Models;
+using DeliveryApp.Infrastructure.Models;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 

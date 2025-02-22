@@ -1,7 +1,6 @@
 ﻿using DeliveryApp.Application.Interfaces.Repositories;
 using DeliveryApp.Domain.Entities;
 using DeliveryApp.Persistance;
-using DeliveryApp.Persistance.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 

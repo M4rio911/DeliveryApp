@@ -1,4 +1,4 @@
-﻿namespace DeliveryApp.Persistance.Models;
+﻿namespace DeliveryApp.Infrastructure.Models;
 
 public enum PackageTypeEnum
 {
