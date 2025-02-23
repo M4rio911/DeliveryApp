@@ -23,14 +23,14 @@ public class UsersController : ControllerBase
 
     [HttpGet]
     [Route("getAllUsers")]
-    public async Task<IActionResult> GetAllUsers()
+    public async Task<IActionResult> GetAllUsers([FromQuery] GetAllUsersParameters parameters)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var result = await _mediator.Send(new GetAllUsers());
+        var result = await _mediator.Send(new GetAllUsers(parameters));
         return Ok(result);
     }
 
