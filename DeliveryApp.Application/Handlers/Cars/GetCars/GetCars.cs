@@ -1,12 +1,12 @@
-﻿using DeliveryApp.Application.Handlers.Cars.GetCars;
-using DeliveryApp.Application.Interfaces.Mediator;
-using DeliveryApp.Domain.Entities;
+﻿using DeliveryApp.Application.Interfaces.Mediator;
 
 namespace DeliveryApp.Application.Handlers.Cars.GetCars;
 
 public class GetCars : IQuery<GetCarsResponse>
 {
-    public GetCars()
+    public bool IncludeAssigned { get; set; } = true;
+    public GetCars(GetCarsParameters parameters)
     {
+        IncludeAssigned = parameters.IncludeAssigned;
     }
 }

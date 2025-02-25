@@ -3,6 +3,7 @@ using System;
 using DeliveryApp.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DeliveryApp.Persistance.Migrations
 {
     [DbContext(typeof(DeliveryDbContext))]
-    partial class DeliveryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250224074853_abc1")]
+    partial class abc1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,7 +92,7 @@ namespace DeliveryApp.Persistance.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Address", (string)null);
+                    b.ToTable("Address");
                 });
 
             modelBuilder.Entity("DeliveryApp.Domain.Entities.Car", b =>
@@ -100,9 +103,6 @@ namespace DeliveryApp.Persistance.Migrations
                         .HasColumnName("CarId");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AssignedUserId")
-                        .HasColumnType("text");
 
                     b.Property<string>("Brand")
                         .IsRequired()
@@ -144,7 +144,7 @@ namespace DeliveryApp.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cars", (string)null);
+                    b.ToTable("Cars");
                 });
 
             modelBuilder.Entity("DeliveryApp.Domain.Entities.Country", b =>
@@ -188,7 +188,7 @@ namespace DeliveryApp.Persistance.Migrations
 
                     b.HasIndex("CurrencyId");
 
-                    b.ToTable("Countries", (string)null);
+                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("DeliveryApp.Domain.Entities.Currency", b =>
@@ -227,7 +227,7 @@ namespace DeliveryApp.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Currencies", (string)null);
+                    b.ToTable("Currencies");
                 });
 
             modelBuilder.Entity("DeliveryApp.Domain.Entities.Dictionary", b =>
@@ -272,7 +272,7 @@ namespace DeliveryApp.Persistance.Migrations
 
                     b.HasIndex("DictionaryTypeId");
 
-                    b.ToTable("Dictionaries", (string)null);
+                    b.ToTable("Dictionaries");
                 });
 
             modelBuilder.Entity("DeliveryApp.Domain.Entities.DictionaryType", b =>
@@ -306,7 +306,7 @@ namespace DeliveryApp.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DictionaryTypes", (string)null);
+                    b.ToTable("DictionaryTypes");
                 });
 
             modelBuilder.Entity("DeliveryApp.Domain.Entities.Driver", b =>
@@ -342,12 +342,11 @@ namespace DeliveryApp.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssignedCarId")
-                        .IsUnique();
+                    b.HasIndex("AssignedCarId");
 
                     b.HasIndex("BaseUserId");
 
-                    b.ToTable("Drivers", (string)null);
+                    b.ToTable("Drivers");
                 });
 
             modelBuilder.Entity("DeliveryApp.Domain.Entities.Package", b =>
@@ -367,7 +366,7 @@ namespace DeliveryApp.Persistance.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("character varying(150)");
 
-                    b.Property<int>("DestinationId")
+                    b.Property<int?>("DestinationId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("Modified")
@@ -408,7 +407,7 @@ namespace DeliveryApp.Persistance.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Packages", (string)null);
+                    b.ToTable("Packages");
                 });
 
             modelBuilder.Entity("DeliveryApp.Domain.Entities.PackagePrice", b =>
@@ -450,7 +449,7 @@ namespace DeliveryApp.Persistance.Migrations
 
                     b.HasIndex("PackageTypeId");
 
-                    b.ToTable("PackagePrices", (string)null);
+                    b.ToTable("PackagePrices");
                 });
 
             modelBuilder.Entity("DeliveryApp.Domain.Entities.Payment", b =>
@@ -497,7 +496,7 @@ namespace DeliveryApp.Persistance.Migrations
 
                     b.HasIndex("PaymentTypeId");
 
-                    b.ToTable("Payments", (string)null);
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("DeliveryApp.Domain.Entities.StoragePackagesLog", b =>
@@ -536,7 +535,7 @@ namespace DeliveryApp.Persistance.Migrations
 
                     b.HasIndex("PackageId");
 
-                    b.ToTable("StoragePackages", (string)null);
+                    b.ToTable("StoragePackages");
                 });
 
             modelBuilder.Entity("DeliveryApp.Domain.Entities.Transportation", b =>
@@ -578,7 +577,7 @@ namespace DeliveryApp.Persistance.Migrations
 
                     b.HasIndex("TransportationStatusId");
 
-                    b.ToTable("Transportations", (string)null);
+                    b.ToTable("Transportations");
                 });
 
             modelBuilder.Entity("DeliveryApp.Domain.Entities.TransportationItem", b =>
@@ -622,7 +621,7 @@ namespace DeliveryApp.Persistance.Migrations
 
                     b.HasIndex("TransportationTypeId");
 
-                    b.ToTable("TransportationItems", (string)null);
+                    b.ToTable("TransportationItems");
                 });
 
             modelBuilder.Entity("DeliveryApp.Domain.Entities.User", b =>
@@ -888,8 +887,8 @@ namespace DeliveryApp.Persistance.Migrations
             modelBuilder.Entity("DeliveryApp.Domain.Entities.Driver", b =>
                 {
                     b.HasOne("DeliveryApp.Domain.Entities.Car", "AssignedCar")
-                        .WithOne("AssignedUser")
-                        .HasForeignKey("DeliveryApp.Domain.Entities.Driver", "AssignedCarId")
+                        .WithMany()
+                        .HasForeignKey("AssignedCarId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("DeliveryApp.Domain.Entities.User", "BaseUser")
@@ -908,8 +907,7 @@ namespace DeliveryApp.Persistance.Migrations
                     b.HasOne("DeliveryApp.Domain.Entities.Address", "Destination")
                         .WithMany()
                         .HasForeignKey("DestinationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("DeliveryApp.Domain.Entities.Dictionary", "PackageStatus")
                         .WithMany()
@@ -1116,12 +1114,6 @@ namespace DeliveryApp.Persistance.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DeliveryApp.Domain.Entities.Car", b =>
-                {
-                    b.Navigation("AssignedUser")
                         .IsRequired();
                 });
 

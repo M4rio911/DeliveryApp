@@ -3,6 +3,7 @@ using DeliveryApp.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace DeliveryApp.Persistance;
 
@@ -124,6 +125,13 @@ public class DeliveryDbContext : IdentityDbContext<User>
             .HasForeignKey(l => l.AddressTypeId)
             .OnDelete(DeleteBehavior.Restrict);
         #endregion
+        #region Car
+        builder.Entity<Car>()
+            .HasOne(c => c.AssignedUser)
+            .WithOne(c => c.AssignedCar)
+            .HasForeignKey<Car>(l => l.AssignedUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+        #endregion
         #region Country
         builder.Entity<Country>()
             .HasOne(c => c.Currency)
@@ -147,8 +155,8 @@ public class DeliveryDbContext : IdentityDbContext<User>
 
         builder.Entity<Driver>()
             .HasOne(c => c.AssignedCar)
-            .WithMany()
-            .HasForeignKey(l => l.AssignedCarId)
+            .WithOne(c => c.AssignedUser)
+            .HasForeignKey<Driver>(l => l.AssignedCarId)
             .OnDelete(DeleteBehavior.Restrict);
         #endregion
         #region Package

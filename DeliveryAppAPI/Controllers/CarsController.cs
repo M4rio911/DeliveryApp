@@ -24,14 +24,14 @@ public class CarsController : ControllerBase
 
     [HttpGet]
     [Route("getCars")]
-    public async Task<IActionResult> GetCars()
+    public async Task<IActionResult> GetCars([FromQuery] GetCarsParameters parameters)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest();
         }
 
-        var result = await _mediator.Send(new GetCars());
+        var result = await _mediator.Send(new GetCars(parameters));
         return Ok(result);
     }
 

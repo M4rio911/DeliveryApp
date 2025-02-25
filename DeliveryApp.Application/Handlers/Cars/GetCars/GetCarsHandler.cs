@@ -17,6 +17,7 @@ public class GetCarsHandler : IQueryHandler<GetCars, GetCarsResponse>
     public async Task<GetCarsResponse> Handle(GetCars request, CancellationToken cancellationToken)
     {
         var response = await _context.Cars
+            .Where(x => request.IncludeAssigned == true || x.AssignedUserId == null)
             .Select(x => new GetCarsDto() 
             {
                 Id = x.Id,
