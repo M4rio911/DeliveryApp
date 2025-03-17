@@ -6,7 +6,7 @@ namespace DeliveryApp.Application.Handlers.Transportations.GetDriverTransportati
 
 public class GetDriverTransportationsResponse : BaseResponse
 {
-    public List<GetDriverTransportationsDto> Transportations { get; set; }
+    public GetDriverTransportationsDto Transportation { get; set; }
 
     public GetDriverTransportationsResponse() : base(true, null) { }
     public GetDriverTransportationsResponse(string error) : base(error) { }
