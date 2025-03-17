@@ -1,11 +1,13 @@
 ﻿using DeliveryApp.Application.Handlers.Packages.AddPackage;
 using DeliveryApp.Application.Handlers.Packages.GetPackage;
+using DeliveryApp.Application.Handlers.Packages.GetPackageDetails;
 using DeliveryApp.Application.Handlers.Packages.GetPackages;
 using DeliveryApp.Application.Handlers.Packages.GetUserPackages;
-using DeliveryApp.Application.Handlers.Packages.SendPackage;
+using DeliveryApp.Application.Handlers.Packages.AssignPackage;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using DeliveryApp.Application.Handlers.Packages.SendPackage;
 
 namespace DeliveryApp.API.Controllers;
 
@@ -24,14 +26,14 @@ public class PackagesController : ControllerBase
 
     [HttpGet]
     [Route("getPackages")]
-    public async Task<IActionResult> GetPackages()
+    public async Task<IActionResult> GetPackages([FromQuery] GetPackagesParameters parameters)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest();
         }
 
-        var result = await _mediator.Send(new GetPackages());
+        var result = await _mediator.Send(new GetPackages(parameters));
         return Ok(result);
     }
 
@@ -61,6 +63,19 @@ public class PackagesController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet]
+    [Route("getPackageDetails")]
+    public async Task<IActionResult> GetPackageDetails([FromQuery] GetPackageDetailsParameters parameters)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        var result = await _mediator.Send(new GetPackageDetails(parameters));
+        return Ok(result);
+    }
+
     [HttpPost]
     [Route("addPackage")]
     public async Task<IActionResult> AddPackage([FromBody] AddPackageParamenters parameters)
@@ -71,6 +86,19 @@ public class PackagesController : ControllerBase
         }
 
         var result = await _mediator.Send(new AddPackage(parameters));
+        return Ok(result);
+    }
+
+    [HttpPost]
+    [Route("assignPackage")]
+    public async Task<IActionResult> AssignPackage([FromBody] AssignPackageParameters parameters)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        var result = await _mediator.Send(new AssignPackage(parameters));
         return Ok(result);
     }
 
@@ -86,30 +114,4 @@ public class PackagesController : ControllerBase
         var result = await _mediator.Send(new SendPackage(parameters));
         return Ok(result);
     }
-
-    //[HttpDelete]
-    //[Route("removePackage")]
-    //public async Task<IActionResult> RemovePackage([FromBody] RemovePackageParameters parameters)
-    //{
-    //    if (!ModelState.IsValid)
-    //    {
-    //        return BadRequest();
-    //    }
-
-    //    var result = await _mediator.Send(new RemovePackage(parameters));
-    //    return Ok(result);
-    //}
-
-    //[HttpPost]
-    //[Route("editPackage")]
-    //public async Task<IActionResult> EditPackage([FromBody] EditPackageParameters parameters)
-    //{
-    //    if (!ModelState.IsValid)
-    //    {
-    //        return BadRequest();
-    //    }
-
-    //    var result = await _mediator.Send(new EditPackage(parameters));
-    //    return Ok(result);
-    //}
 }

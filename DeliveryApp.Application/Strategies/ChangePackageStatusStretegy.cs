@@ -16,6 +16,9 @@ public class ChangePackageStatusStretegy : IChangePackageStatusStretegy
             => PackageStatusEnum.Posted,
 
             PackageStatusEnum.Posted
+            => PackageStatusEnum.AssignedToCollect,
+
+            PackageStatusEnum.AssignedToCollect
             => PackageStatusEnum.Collected,
 
             PackageStatusEnum.Collected

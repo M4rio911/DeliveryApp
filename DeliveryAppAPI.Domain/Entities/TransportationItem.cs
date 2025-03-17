@@ -9,8 +9,6 @@ public class TransportationItem : AuditableEntity
     public int Id { get; set; }
     public int TransportationId { get; set; }
     public Transportation Transportation { get; set; }
-    public int TransportationTypeId { get; set; }
-    public Dictionary TransportationType { get; set; }
     public int PackageId { get; set; }
     public Package Package { get; set; }
 }

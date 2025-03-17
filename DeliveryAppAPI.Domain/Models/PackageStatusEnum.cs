@@ -5,10 +5,12 @@ public enum PackageStatusEnum
     New,
     Paid,
     Posted,
+    AssignedToCollect,
     Collected,
     Storage,
-    IssuedToDelivery,
+    AssignedToDelivery,
     InDelivery,
+    IssuedToDelivery,
     Delivered,
     Completed
 

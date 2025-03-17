@@ -25,6 +25,7 @@ public class GetDictionariesByTypeHandler : IQueryHandler<GetDictionariesByType,
                 IsDefault = x.IsDefault,
                 Name = x.Name
             })
+            .OrderBy(x => x.DictionaryId)
             .ToListAsync(cancellationToken);
 
         if (response == null)

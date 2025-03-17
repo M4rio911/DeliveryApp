@@ -256,12 +256,6 @@ public class DeliveryDbContext : IdentityDbContext<User>
         #endregion
         #region TransportationItem
         builder.Entity<TransportationItem>()
-            .HasOne(c => c.TransportationType)
-            .WithMany()
-            .HasForeignKey(l => l.TransportationTypeId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.Entity<TransportationItem>()
             .HasOne(c => c.Package)
             .WithMany()
             .HasForeignKey(l => l.PackageId)

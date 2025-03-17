@@ -20,10 +20,14 @@ public class GetDriversHandler : IQueryHandler<GetDrivers, GetDriversResponse>
     {
         var response = await _context.Drivers
             .Include(x => x.AssignedCar)
+            .Include(x => x.BaseUser)
             .Select(x => new GetDriverDto() 
             {
                 Id = x.Id,
                 BaseUserId = x.BaseUserId,
+                FirstName = x.BaseUser.FirstName,
+                LastName = x.BaseUser.LastName,
+                Login = x.BaseUser.UserName,
                 AssignedCarId = x.AssignedCarId,
                 Car = new GetCarsDto()
                 {

@@ -20,6 +20,7 @@ public class GetPackagesHandler : IQueryHandler<GetPackages, GetPackagesResponse
     public async Task<GetPackagesResponse> Handle(GetPackages request, CancellationToken cancellationToken)
     {
         var response = await _context.Packages
+            .Where(x => request.PackageStatusId == 0 || x.PackageStatusId == request.PackageStatusId)
             .Include(x => x.Sender)
             .Include(x => x.Reciver)
             .Select(x => new GetPackageDto() 
