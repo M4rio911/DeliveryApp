@@ -19,7 +19,7 @@ public class DeliveryDbContext : IdentityDbContext<User>
     public DbSet<DictionaryType> DictionaryTypes { get; set; }
     public DbSet<Driver> Drivers{ get; set; }
     public DbSet<Package> Packages { get; set; }
-    public DbSet<StoragePackagesLog> StoragePackages { get; set; }
+    public DbSet<StoragePackages> StoragePackages { get; set; }
     public DbSet<PackagePrice> PackagePrices { get; set; }
     public DbSet<Payment> Payments { get; set; }
     public DbSet<Transportation> Transportations { get; set; }
@@ -73,7 +73,7 @@ public class DeliveryDbContext : IdentityDbContext<User>
         {
             b.HasKey(c => c.Id);
         });
-        builder.Entity<StoragePackagesLog>(b =>
+        builder.Entity<StoragePackages>(b =>
         {
             b.HasKey(c => c.Id);
         });
@@ -85,7 +85,7 @@ public class DeliveryDbContext : IdentityDbContext<User>
         {
             b.HasKey(c => c.Id);
         });
-        builder.Entity<StoragePackagesLog>(b =>
+        builder.Entity<StoragePackages>(b =>
         {
             b.HasKey(c => c.Id);
         });
@@ -229,7 +229,7 @@ public class DeliveryDbContext : IdentityDbContext<User>
             .OnDelete(DeleteBehavior.Restrict);
         #endregion
         #region StoragePackages
-        builder.Entity<StoragePackagesLog>()
+        builder.Entity<StoragePackages>()
             .HasOne(a => a.Package)
             .WithMany()
             .HasForeignKey(a => a.PackageId)
@@ -262,7 +262,7 @@ public class DeliveryDbContext : IdentityDbContext<User>
             .OnDelete(DeleteBehavior.Restrict);
         #endregion
         #region StoragePackagesLog
-        builder.Entity<StoragePackagesLog>()
+        builder.Entity<StoragePackages>()
             .HasOne(c => c.Package)
             .WithMany()
             .HasForeignKey(l => l.PackageId)

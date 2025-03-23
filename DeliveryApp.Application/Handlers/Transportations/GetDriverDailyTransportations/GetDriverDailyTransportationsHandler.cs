@@ -8,22 +8,22 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
-namespace DeliveryApp.Application.Handlers.Transportations.GetDriverTransportations;
+namespace DeliveryApp.Application.Handlers.Transportations.GetDriverDailyTransportations;
 
-public class GetDriverTransportationsHandler : IQueryHandler<GetDriverTransportations, GetDriverTransportationsResponse>
+public class GetDriverDailyTransportationsHandler : IQueryHandler<GetDriverDailyTransportations, GetDriverDailyTransportationsResponse>
 {
     private readonly DeliveryDbContext _context;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IDictionaryRepository _dictionaryRepository;
 
-    public GetDriverTransportationsHandler(DeliveryDbContext deliveryDbContext, IHttpContextAccessor httpContext, IDictionaryRepository dictionaryRepository)
+    public GetDriverDailyTransportationsHandler(DeliveryDbContext deliveryDbContext, IHttpContextAccessor httpContext, IDictionaryRepository dictionaryRepository)
     {
         _context = deliveryDbContext;
         _httpContextAccessor = httpContext;
         _dictionaryRepository = dictionaryRepository;
     }
 
-    public async Task<GetDriverTransportationsResponse> Handle(GetDriverTransportations request, CancellationToken cancellationToken)
+    public async Task<GetDriverDailyTransportationsResponse> Handle(GetDriverDailyTransportations request, CancellationToken cancellationToken)
     {
         var user = _httpContextAccessor.HttpContext?.User.Identities.FirstOrDefault();
         if (user == null)
@@ -38,12 +38,12 @@ public class GetDriverTransportationsHandler : IQueryHandler<GetDriverTransporta
 
         if (driver == null)
         {
-            return new GetDriverTransportationsResponse("Driver was not found");
+            return new GetDriverDailyTransportationsResponse("Driver was not found");
         }
 
         var transportation = await _context.Transportations
             .Where(x =>
-                x.DateOfTransport.Date == request.SelectedDate.Date &&
+                x.Id == request.TransportationId &&
                 x.AssignedDriverId == driver.Id)
             .FirstOrDefaultAsync();
 
@@ -78,12 +78,20 @@ public class GetDriverTransportationsHandler : IQueryHandler<GetDriverTransporta
             DictionaryTypeEnum.PackageStatus.ToString(),
             PackageStatusEnum.AssignedToCollect.ToString())).Id;
 
-        var toDeliveryStatus = (await _dictionaryRepository.GetDictionary(
+        var collectedStatus = (await _dictionaryRepository.GetDictionary(
             DictionaryTypeEnum.PackageStatus.ToString(),
-            PackageStatusEnum.AssignedToDelivery.ToString())).Id;
+            PackageStatusEnum.Collected.ToString())).Id;
 
-        var collectList = response.Where(x => x.PackageStatusId == toCollectStatus).ToList();
-        var deliverList = response.Where(x => x.PackageStatusId == toDeliveryStatus).ToList();
+        var inssuedToDeliveryStatus = (await _dictionaryRepository.GetDictionary(
+            DictionaryTypeEnum.PackageStatus.ToString(),
+            PackageStatusEnum.IssuedToDelivery.ToString())).Id;
+
+        var deliveriedStatus = (await _dictionaryRepository.GetDictionary(
+            DictionaryTypeEnum.PackageStatus.ToString(),
+            PackageStatusEnum.Delivered.ToString())).Id;
+
+        var collectList = response.Where(x => x.PackageStatusId == toCollectStatus || x.PackageStatusId == collectedStatus).ToList();
+        var deliverList = response.Where(x => x.PackageStatusId == inssuedToDeliveryStatus || x.PackageStatusId == deliveriedStatus).ToList();
 
         var transportationResponse = new GetDriverTransportationsDto()
         {
@@ -91,10 +99,10 @@ public class GetDriverTransportationsHandler : IQueryHandler<GetDriverTransporta
             PackagesToDelivery = deliverList,
             TransportationStatus = transportation?.TransportationStatusId ?? 0,
             TransportationId = transportId,
-            DateOfTransport = request.SelectedDate.Date
+            DateOfTransport = transportation?.DateOfTransport ?? DateTime.MinValue,
         };
 
-        return new GetDriverTransportationsResponse()
+        return new GetDriverDailyTransportationsResponse()
         {
             Transportation = transportationResponse
         };

@@ -21,9 +21,4 @@
     <ProjectReference Include="..\DeliveryAppAPI.Persistance\DeliveryApp.Persistance.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Handlers\Packages\EditPackage\" />
-    <Folder Include="Handlers\Packages\RemovePackage\" />
-  </ItemGroup>
-
 </Project>

@@ -25,12 +25,12 @@ public class ChangePackageStatusStretegy : IChangePackageStatusStretegy
             => PackageStatusEnum.Storage,
 
             PackageStatusEnum.Storage
+            => PackageStatusEnum.AssignedToDelivery,
+
+            PackageStatusEnum.AssignedToDelivery
             => PackageStatusEnum.IssuedToDelivery,
 
             PackageStatusEnum.IssuedToDelivery
-            => PackageStatusEnum.InDelivery,
-
-            PackageStatusEnum.InDelivery
             => PackageStatusEnum.Delivered,
 
             PackageStatusEnum.Delivered

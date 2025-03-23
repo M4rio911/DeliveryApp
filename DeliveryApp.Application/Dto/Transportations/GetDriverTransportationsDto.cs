@@ -6,6 +6,7 @@ public class GetDriverTransportationsDto
 {
     public DateTime DateOfTransport {  get; set; }
     public int TransportationStatus { get; set; }
+    public int TransportationId { get; set; }
     public List<GetDriverTransportationPackageDto> PackagesToCollect { get; set; }
     public List<GetDriverTransportationPackageDto> PackagesToDelivery { get; set; }
     
