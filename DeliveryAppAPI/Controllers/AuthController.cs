@@ -51,6 +51,11 @@ public class AuthController : ControllerBase
             return BadRequest("User not found.");
         }
 
+        if(user.Id != model.UserId)
+        {
+            return BadRequest("User not found.");
+        }
+
         var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
         var resetResult = await _userManager.ResetPasswordAsync(user, resetToken, model.NewPassword);
 
