@@ -7,4 +7,5 @@ public class GetUserResponse : BaseResponse
 {
     public GetUserDto User { get; set; }
     public GetUserResponse() : base(true, null) { }
+    public GetUserResponse(string error) : base(error) { }
 }

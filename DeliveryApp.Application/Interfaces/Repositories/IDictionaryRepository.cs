@@ -9,6 +9,7 @@ public interface IDictionaryRepository
     Task<Dictionary> GetByIdAsync(int id);
     Task<Dictionary> GetByIdNTAsync(int id);
     Task<Dictionary> GetDictionary(string type, string name);
+    Task<List<Dictionary>> GetDictionariesByType(string type);
     Task<Dictionary> GetDictionary(string type, int dictionaryId);
     Task<Dictionary> GetDefaultDictionaryNTAsync(string type);
 }

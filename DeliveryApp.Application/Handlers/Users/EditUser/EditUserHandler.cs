@@ -47,9 +47,15 @@ public class EditUserHandler : ICommandHandler<EditUser, EditUserResponse>
         dbUser.Email = request.Email;
         dbUser.PhoneNumber = request.PhoneNumber;
 
+        //USER TYPE NOT CHANGED
+        if (request.UserType == dbUser.UserTypeId)
+        {
+            await _context.SaveChangesAsync(cancellationToken);
+            return new EditUserResponse(dbUser);
+        }
 
         //IF NOT DRIVER && WAS NOT DRIVER
-        if(driverUserTypeId != request.UserType
+        if (driverUserTypeId != request.UserType
         && driverUserTypeId != dbUser.UserTypeId)
         {
             dbUser.UserTypeId = request.UserType;

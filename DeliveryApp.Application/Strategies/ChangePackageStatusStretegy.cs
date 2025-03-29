@@ -37,4 +37,19 @@ public class ChangePackageStatusStretegy : IChangePackageStatusStretegy
             => PackageStatusEnum.Completed
         };
     }
+
+    public static PackageStatusEnum ConvertToPublicPackageStatus(PackageStatusEnum packageStatus)
+    {
+        return packageStatus switch
+        {
+            PackageStatusEnum.AssignedToCollect or
+            PackageStatusEnum.Collected or
+            PackageStatusEnum.Storage or
+            PackageStatusEnum.AssignedToDelivery
+            => PackageStatusEnum.InDelivery,
+
+            _ => packageStatus
+            
+        };
+    }
 }

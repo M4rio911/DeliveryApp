@@ -2,5 +2,6 @@
 
 public class GetUserParameters
 {
-    public string UserId { get; set; }
+    public string? UserId { get; set; }
+    public bool? CurrentUser { get; set; }
 }
