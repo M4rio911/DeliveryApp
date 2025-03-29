@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using DeliveryApp.Application.Handlers.Packages.SendPackage;
 using DeliveryApp.Application.Handlers.Packages.MarkAsCollected;
+using DeliveryApp.Application.Handlers.Packages.MarkAsDelivered;
 
 namespace DeliveryApp.API.Controllers;
 
@@ -126,6 +127,19 @@ public class PackagesController : ControllerBase
         }
 
         var result = await _mediator.Send(new MarkAsCollected(parameters));
+        return Ok(result);
+    }
+
+    [HttpPost]
+    [Route("MarkAsDelivered")]
+    public async Task<IActionResult> MarkAsDeliveried([FromBody] MarkAsDeliveredParameters parameters)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        var result = await _mediator.Send(new MarkAsDelivered(parameters));
         return Ok(result);
     }
 }

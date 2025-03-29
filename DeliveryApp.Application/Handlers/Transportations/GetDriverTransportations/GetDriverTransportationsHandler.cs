@@ -78,12 +78,16 @@ public class GetDriverTransportationsHandler : IQueryHandler<GetDriverTransporta
             DictionaryTypeEnum.PackageStatus.ToString(),
             PackageStatusEnum.AssignedToCollect.ToString())).Id;
 
-        var toDeliveryStatus = (await _dictionaryRepository.GetDictionary(
+        var assignedToDelivery = (await _dictionaryRepository.GetDictionary(
             DictionaryTypeEnum.PackageStatus.ToString(),
             PackageStatusEnum.AssignedToDelivery.ToString())).Id;
 
+        var issuedToDelivery = (await _dictionaryRepository.GetDictionary(
+            DictionaryTypeEnum.PackageStatus.ToString(),
+            PackageStatusEnum.IssuedToDelivery.ToString())).Id;
+
         var collectList = response.Where(x => x.PackageStatusId == toCollectStatus).ToList();
-        var deliverList = response.Where(x => x.PackageStatusId == toDeliveryStatus).ToList();
+        var deliverList = response.Where(x => x.PackageStatusId == assignedToDelivery || x.PackageStatusId == issuedToDelivery).ToList();
 
         var transportationResponse = new GetDriverTransportationsDto()
         {

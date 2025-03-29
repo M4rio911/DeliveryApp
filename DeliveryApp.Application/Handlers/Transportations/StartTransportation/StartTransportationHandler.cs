@@ -54,8 +54,6 @@ public class StartTransportationHandler : IQueryHandler<StartTransportation, Sta
             DictionaryTypeEnum.TransportationStatus.ToString(),
             TransportationStatusEnum.Started.ToString())).Id;
 
-        transportation.TransportationStatusId = startedTransportationStatus;
-
         var assignedToDeliveryStatus = (await _dictionaryRepository.GetDictionary(
             DictionaryTypeEnum.PackageStatus.ToString(),
             PackageStatusEnum.AssignedToDelivery.ToString())).Id;
@@ -69,9 +67,21 @@ public class StartTransportationHandler : IQueryHandler<StartTransportation, Sta
             .Where(x => x.TransportationId == transportation.Id &&
                         x.Package.PackageStatusId == assignedToDeliveryStatus);
 
+
+        transportation.TransportationStatusId = startedTransportationStatus;
+
         foreach (var item in assignedToDeliveryList)
         {
             item.Package.PackageStatusId = issuedToDeliveryStatus;
+        }
+
+        var issuedPackagesIds = assignedToDeliveryList.Select(x => x.Package.Id).ToList();
+
+        var storagePackages = _context.StoragePackages.Where(x => issuedPackagesIds.Contains(x.Package.Id)).ToList();
+
+        foreach (var package in storagePackages) 
+        { 
+            package.DateOfExit = DateTime.UtcNow;
         }
 
         _context.SaveChanges();

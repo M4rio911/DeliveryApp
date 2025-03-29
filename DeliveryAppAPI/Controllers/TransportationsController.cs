@@ -3,6 +3,7 @@ using DeliveryApp.Application.Handlers.Transportations.FinishTransportation;
 using DeliveryApp.Application.Handlers.Transportations.GetDriverDailyTransportations;
 using DeliveryApp.Application.Handlers.Transportations.GetDriverTransportations;
 using DeliveryApp.Application.Handlers.Transportations.GetTransportation;
+using DeliveryApp.Application.Handlers.Transportations.GetTransportationsHistory;
 using DeliveryApp.Application.Handlers.Transportations.StartTransportation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -46,6 +47,19 @@ public class TransportationsController : ControllerBase
         }
 
         var result = await _mediator.Send(new GetDriverTransportations(parameters));
+        return Ok(result);
+    }
+
+    [HttpGet]
+    [Route("getTransportationsHistory")]
+    public async Task<IActionResult> GetTransportationsHistory([FromQuery] GetTransportationsHistoryParameters parameters)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        var result = await _mediator.Send(new GetTransportationsHistory(parameters));
         return Ok(result);
     }
 

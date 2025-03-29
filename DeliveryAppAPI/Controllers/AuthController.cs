@@ -42,6 +42,31 @@ public class AuthController : ControllerBase
         return Unauthorized();
     }
 
+    [HttpPost("resetPassword")]
+    public async Task<IActionResult> Login([FromBody] ResetPasswordModel model)
+    {
+        var user = await _userManager.FindByEmailAsync(model.Email);
+        if (user == null)
+        {
+            return BadRequest("User not found.");
+        }
+
+        var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+        var resetResult = await _userManager.ResetPasswordAsync(user, resetToken, model.NewPassword);
+
+        if (resetResult.Succeeded)
+        {
+            return Ok("New password was set");
+        }
+
+        foreach (var error in resetResult.Errors)
+        {
+            Console.WriteLine($"Error: {error.Description}");
+        }
+
+        return BadRequest();
+    }
+
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterModel model)
     {
