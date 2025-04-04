@@ -1,15 +1,16 @@
-﻿using DeliveryApp.Application.Handlers.Packages.AddPackage;
-using DeliveryApp.Application.Handlers.Packages.GetPackage;
-using DeliveryApp.Application.Handlers.Packages.GetPackageDetails;
-using DeliveryApp.Application.Handlers.Packages.GetPackages;
+﻿using DeliveryApp.Application.Handlers.Packages.GetPackageDetails;
 using DeliveryApp.Application.Handlers.Packages.GetUserPackages;
+using DeliveryApp.Application.Handlers.Packages.MarkAsCollected;
+using DeliveryApp.Application.Handlers.Packages.MarkAsDelivered;
+using DeliveryApp.Application.Handlers.Packages.CollectPackage;
 using DeliveryApp.Application.Handlers.Packages.AssignPackage;
+using DeliveryApp.Application.Handlers.Packages.GetPackages;
+using DeliveryApp.Application.Handlers.Packages.SendPackage;
+using DeliveryApp.Application.Handlers.Packages.AddPackage;
+using DeliveryApp.Application.Handlers.Packages.GetPackage;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using DeliveryApp.Application.Handlers.Packages.SendPackage;
-using DeliveryApp.Application.Handlers.Packages.MarkAsCollected;
-using DeliveryApp.Application.Handlers.Packages.MarkAsDelivered;
 
 namespace DeliveryApp.API.Controllers;
 
@@ -114,6 +115,19 @@ public class PackagesController : ControllerBase
         }
 
         var result = await _mediator.Send(new SendPackage(parameters));
+        return Ok(result);
+    }
+
+    [HttpPost]
+    [Route("collectPackage")]
+    public async Task<IActionResult> CollectPackage([FromBody] CollectPackageParameters parameters)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        var result = await _mediator.Send(new CollectPackage(parameters));
         return Ok(result);
     }
 

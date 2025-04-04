@@ -34,10 +34,12 @@ public class GetUserPackagesHandler : IQueryHandler<GetUserPackages, GetUserPack
             .GetDictionariesByType(DictionaryTypeEnum.PackageStatus.ToString()))
             .ToDictionary(x => x.Id, x => x.Name);
 
-        var response = await _context.Packages
+        var packageCompleatedStatus = (await _dictionaryRepository.GetDictionary(DictionaryTypeEnum.PackageStatus.ToString(), PackageStatusEnum.Completed.ToString())).Id;
+
+        var postedFromUser = await _context.Packages
            .Include(x => x.Sender)
            .Include(x => x.Reciver)
-           .Where(x => x.SenderId == userId)
+           .Where(x => x.SenderId == userId && x.PackageStatusId != packageCompleatedStatus)
            .Select(x => new GetPackageDto
            {
                PackageId = x.Id,
@@ -49,9 +51,24 @@ public class GetUserPackagesHandler : IQueryHandler<GetUserPackages, GetUserPack
            })
            .ToListAsync(cancellationToken);
 
+        var postedToUser = await _context.Packages
+           .Include(x => x.Sender)
+           .Include(x => x.Reciver)
+           .Where(x => x.ReciverId == userId && x.PackageStatusId != packageCompleatedStatus)
+           .Select(x => new GetPackageDto
+           {
+               PackageId = x.Id,
+               SenderEmail = x.Sender.Email,
+               ReciverEmail = x.Reciver.Email,
+               PackageStatusId = GetPublicPackageStatusId(x.PackageStatusId, packageStatuses),
+               PackageTypeId = x.PackageTypeId
+           })
+           .ToListAsync(cancellationToken);
+
         return new GetUserPackagesResponse()
         {
-            UserPackages = response
+            PostedFromUser = postedFromUser,
+            PostedToUser = postedToUser
         };
     }
     private static int GetPublicPackageStatusId(int packageStatusId, Dictionary<int, string> packageStatuses)
