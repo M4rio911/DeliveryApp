@@ -5,6 +5,7 @@ using DeliveryApp.Persistance;
 using DeliveryApp.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace DeliveryApp.Application.Handlers.User.EditUser;
 
@@ -12,13 +13,15 @@ public class EditUserHandler : ICommandHandler<EditUser, EditUserResponse>
 {
     private readonly IDictionaryRepository _dictionaryRepository;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly UserManager<Domain.Entities.User> _userManager;
     private readonly DeliveryDbContext _context;
 
-    public EditUserHandler(IDictionaryRepository dictionaryRepository, IHttpContextAccessor httpContextAccessor, DeliveryDbContext deliveryDbContext)
+    public EditUserHandler(IDictionaryRepository dictionaryRepository, IHttpContextAccessor httpContextAccessor, DeliveryDbContext deliveryDbContext, UserManager<Domain.Entities.User> userManager)
     {
         _dictionaryRepository = dictionaryRepository;
         _httpContextAccessor = httpContextAccessor;
         _context = deliveryDbContext;
+        _userManager = userManager;
     }
 
     public async Task<EditUserResponse> Handle(EditUser request, CancellationToken cancellationToken)
@@ -85,6 +88,7 @@ public class EditUserHandler : ICommandHandler<EditUser, EditUserResponse>
             };
             _context.Drivers.Add(newDriver);
         }
+
 
         await _context.SaveChangesAsync(cancellationToken);
         return new EditUserResponse(dbUser);

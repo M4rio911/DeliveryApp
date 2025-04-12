@@ -6,17 +6,13 @@ public static class CorsConfiguration
     {
         builder.Services.AddCors(options =>
         {
-            options.AddPolicy("AllowAll", builder =>
+            options.AddPolicy("AllowAll", policy =>
             {
-                builder
-                    .AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .WithOrigins("https://localhost:8081/")
-
-                    .SetIsOriginAllowed(origin => true)
-                    .AllowCredentials()
-                    .WithExposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Methods");
+                policy
+                .WithOrigins("http://localhost:8080")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
             });
         });
     }

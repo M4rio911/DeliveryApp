@@ -26,7 +26,7 @@ public class GetAllUsersHandler : IQueryHandler<GetAllUsers, GetAllUsersResponse
         int? userTypeFilter = request.UserTypeId == 0 ? null : 
             (await _dictionaryRepository.GetDictionary(DictionaryTypeEnum.UserType.ToString(), request.UserTypeId)).Id;
 
-        var response = await _context.Users
+        var response = await _context.Users 
             .Where(x => userTypeFilter == null || x.UserTypeId == userTypeFilter)
             .Select(x => new GetUserDto()
             {
@@ -39,7 +39,6 @@ public class GetAllUsersHandler : IQueryHandler<GetAllUsers, GetAllUsersResponse
                 UserType = x.UserTypeId,
                 PhoneNumber = x.PhoneNumber
             })
-            //IF request.userType
             .OrderByDescending(x => x.ActiveStatus)
             .ThenBy(x => x.UserName)
             .ToListAsync();

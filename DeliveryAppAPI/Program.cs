@@ -4,11 +4,14 @@ using DeliveryApp.Application.Interfaces.Repositories;
 using DeliveryApp.Domain.Entities;
 using DeliveryApp.Infrastructure.Repositories;
 using DeliveryApp.Persistance;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Swashbuckle.AspNetCore.Filters;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.LoadAppConfiguration();
@@ -29,25 +32,6 @@ builder.Services.AddScoped<IDictionaryRepository, DictionaryRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();
-//JWT
-//var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"]);
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//})
-//.AddJwtBearer(options =>
-//{
-//    options.RequireHttpsMetadata = false;
-//    options.SaveToken = true;
-//    options.TokenValidationParameters = new TokenValidationParameters
-//    {
-//        ValidateIssuerSigningKey = true,
-//        IssuerSigningKey = new SymmetricSecurityKey(key),
-//        ValidateIssuer = false,
-//        ValidateAudience = false
-//    };
-//});
 
 //CORS
 builder.ConfigureCors();
@@ -74,20 +58,8 @@ builder.Services.AddEntityFrameworkNpgsql().AddDbContext<DeliveryDbContext>(opti
     options.UseNpgsql(builder.Configuration.GetConnectionString("DeliveryDBConnection"));
 });
 
-//IDENTITY???
-//builder.Services.AddIdentity<User, IdentityRole>()
-//    .AddEntityFrameworkStores<DeliveryDbContext>()
-//    .AddDefaultTokenProviders();
-
-//builder.Services.AddIdentity<User, IdentityRole>(options =>
-//{
-//    options.User.RequireUniqueEmail = true;
-//    options.SignIn.RequireConfirmedEmail = false;
-//})
-//    .AddEntityFrameworkStores<DeliveryDbContext>()
-////    .AddDefaultTokenProviders();
-
-builder.Services.AddIdentityApiEndpoints<User>(options =>
+//Identity
+builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.User.RequireUniqueEmail = true;
     options.SignIn.RequireConfirmedEmail = false;
@@ -95,16 +67,60 @@ builder.Services.AddIdentityApiEndpoints<User>(options =>
     options.Password.RequiredLength = 8;
 })
     .AddEntityFrameworkStores<DeliveryDbContext>()
+    .AddUserManager<UserManager<User>>()
+    .AddRoleManager<RoleManager<IdentityRole>>()
     .AddDefaultTokenProviders();
 
-////ENTITY
-//builder.Services.AddIdentity<User, Role>()
-//    .AddEntityFrameworkStores<DeliveryDbContext>()
-//    .AddUserManager<UserManager<User>>()
-//    .AddRoleManager<UserManager<Role>>();
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"])),
+        ValidateIssuerSigningKey = true
+    };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            if (context.Request.Headers.ContainsKey("Authorization"))
+            {
+                var token = context.Request.Headers["Authorization"].ToString();
+                if (token.StartsWith("Bearer "))
+                    context.Token = token.Substring("Bearer ".Length).Trim();
+            }
+
+            return Task.CompletedTask;
+        }
+    };
+});
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+//ROLES
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = services.GetRequiredService<UserManager<User>>();
+
+    await InitRoles.SeedRolesAsync(roleManager);
+    await InitRoles.SeedAdminUserAsync(userManager);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -113,12 +129,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapIdentityApi<User>();
+app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCors("AllowAll");
 app.MapControllers();
 
 app.Run();

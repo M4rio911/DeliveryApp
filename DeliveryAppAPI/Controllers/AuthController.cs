@@ -28,18 +28,24 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginModel model)
     {
-        var user = await _userManager.FindByNameAsync(model.Username);
+        var userByName = await _userManager.FindByNameAsync(model.UsernameOrEmail);
+        var userEmail = await _userManager.FindByEmailAsync(model.UsernameOrEmail);
+        var user = userByName ?? userEmail ?? null;
+
         if (user != null 
             && user.ActiveStatus == true
             && await _userManager.CheckPasswordAsync(user, model.Password))
         {
-            var token = GenerateJwtToken(user);
-            return Ok(new { token });
+
+            var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
+            if (result.Succeeded)
+            {
+                var token = GenerateJwtToken(user);
+                return Ok(new { token });
+            }
         }
 
-        await _signInManager.SignInAsync(user, true);
-
-        return Unauthorized();
+        return Unauthorized("Invalid credentials.");
     }
 
     [HttpPost("resetPassword")]
@@ -91,12 +97,13 @@ public class AuthController : ControllerBase
             ActiveStatus = true
         };
 
-        IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+        var result = await _userManager.CreateAsync(user, model.Password);
 
         if (!result.Succeeded)
         {
             return BadRequest(result);
         }
+        await _userManager.AddToRoleAsync(user, "Client");
 
         return Ok();
     }
@@ -127,25 +134,23 @@ public class AuthController : ControllerBase
         });
     }
 
-
-    private string GenerateJwtToken(IdentityUser user)
+    private string GenerateJwtToken(User user)
     {
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.NameIdentifier, user.Id)
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
+            new Claim(ClaimTypes.Name, user.UserName),
+            new Claim(ClaimTypes.Role, _userManager.GetRolesAsync(user).Result.FirstOrDefault() ?? "")
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
-            issuer: null,
-            audience: null,
             claims: claims,
-            expires: DateTime.Now.AddMinutes(30),
-            signingCredentials: creds);
+            expires: DateTime.Now.AddMinutes(15),
+            signingCredentials: creds
+        );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
