@@ -7,6 +7,6 @@ namespace DeliveryApp.Application.Handlers.Packages.SendPackage;
 
 public class SendPackageResponse : BaseResponse
 {
-    public SendPackageResponse() : base(true, null) { }
+    public SendPackageResponse() : base(true, null, true) { }
     public SendPackageResponse(string error) : base(error) { }
 }

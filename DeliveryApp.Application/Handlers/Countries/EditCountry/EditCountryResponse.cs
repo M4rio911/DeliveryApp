@@ -7,7 +7,7 @@ namespace DeliveryApp.Application.Handlers.Countries.EditCountry;
 public class EditCountryResponse : BaseResponse
 {
     public GetCountryDto Country { get; set; }
-    public EditCountryResponse(Country country) : base(true, null) 
+    public EditCountryResponse(Country country) : base(true, null, true) 
     {
         Country = new GetCountryDto
         {

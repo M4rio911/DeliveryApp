@@ -7,6 +7,6 @@ namespace DeliveryApp.Application.Handlers.Packages.AssignPackage;
 
 public class AssignPackageResponse : BaseResponse
 {
-    public AssignPackageResponse() : base(true, null) { }
+    public AssignPackageResponse() : base(true, null, true) { }
     public AssignPackageResponse(string error) : base(error) { }
 }

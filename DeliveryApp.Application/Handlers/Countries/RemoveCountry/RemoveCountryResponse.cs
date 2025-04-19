@@ -4,6 +4,6 @@ namespace DeliveryApp.Application.Handlers.Countries.RemoveCountry;
 
 public class RemoveCountryResponse : BaseResponse
 {
-    public RemoveCountryResponse() : base(true, null) { }
+    public RemoveCountryResponse() : base(true, null, true) { }
     public RemoveCountryResponse(string error) : base(error) { }
 }

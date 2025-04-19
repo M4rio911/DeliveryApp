@@ -21,7 +21,8 @@ public class GetDriversHandler : IQueryHandler<GetDrivers, GetDriversResponse>
         var response = await _context.Drivers
             .Include(x => x.AssignedCar)
             .Include(x => x.BaseUser)
-            .Where(x => x.AssignedCarId != null)
+            .Where(x => x.AssignedCarId != null &&
+                   x.BaseUser.ActiveStatus == true || request.OnlyActive == false)
             .Select(x => new GetDriverDto() 
             {
                 Id = x.Id,

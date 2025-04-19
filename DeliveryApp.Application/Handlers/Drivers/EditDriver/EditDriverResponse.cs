@@ -7,7 +7,7 @@ namespace DeliveryApp.Application.Handlers.Drivers.EditDriver;
 public class EditDriverResponse : BaseResponse
 {
     public GetDriverDto Driver { get; set; }
-    public EditDriverResponse(Driver driver) : base(true, null) 
+    public EditDriverResponse(Driver driver) : base(true, null, true) 
     {
         Driver = new GetDriverDto
         {

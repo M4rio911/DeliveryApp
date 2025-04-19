@@ -7,7 +7,7 @@ namespace DeliveryApp.Application.Handlers.Dictionaries.EditDictionaryType;
 public class EditDictionaryTypeResponse : BaseResponse
 {
     public GetDictionaryTypeDto DictionaryType { get; set; }
-    public EditDictionaryTypeResponse(DictionaryType dictionaryType) : base(true, null)
+    public EditDictionaryTypeResponse(DictionaryType dictionaryType) : base(true, null, true)
     {
         DictionaryType = new GetDictionaryTypeDto()
         {

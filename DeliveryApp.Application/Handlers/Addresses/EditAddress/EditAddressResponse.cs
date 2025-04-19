@@ -7,7 +7,7 @@ namespace DeliveryApp.Application.Handlers.Addresses.EditAddress;
 public class EditAddressResponse : BaseResponse
 {
     public EditAddressDto Address { get; set; }
-    public EditAddressResponse(Address address) : base(true, null) 
+    public EditAddressResponse(Address address) : base(true, null, true) 
     {
         Address = new EditAddressDto
         {

@@ -5,6 +5,6 @@ namespace DeliveryApp.Application.Handlers.PackagePrices.EditPackagePrices;
 
 public class EditPackagePricesResponse : BaseResponse
 {
-    public EditPackagePricesResponse() : base(true, null) { }
+    public EditPackagePricesResponse() : base(true, null, true) { }
     public EditPackagePricesResponse(string error) : base(error) { }
 }

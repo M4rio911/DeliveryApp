@@ -23,14 +23,14 @@ public class DriversController : ControllerBase
 
     [HttpGet]
     [Route("getDrivers")]
-    public async Task<IActionResult> GetDrivers()
+    public async Task<IActionResult> GetDrivers([FromQuery] GetDriversParameters parameters)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var result = await _mediator.Send(new GetDrivers());
+        var result = await _mediator.Send(new GetDrivers(parameters));
         return Ok(result);
     }
 

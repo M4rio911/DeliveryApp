@@ -7,7 +7,7 @@ namespace DeliveryApp.Application.Handlers.Dictionaries.EditDictionary;
 public class EditDictionaryResponse : BaseResponse
 {
     public GetDictionaryDto Dictionary { get; set; }
-    public EditDictionaryResponse(Dictionary dictionary) : base(true, null)
+    public EditDictionaryResponse(Dictionary dictionary) : base(true, null, true)
     {
         Dictionary = new GetDictionaryDto()
         {

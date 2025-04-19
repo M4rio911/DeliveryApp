@@ -125,12 +125,14 @@ public class AuthController : ControllerBase
             return NotFound("Nie znaleziono użytkownika.");
         }
 
+        var userRole = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
+
         return Ok(new
         {
             user.Id,
             user.UserName,
             user.Email,
-            user.UserType
+            userRole
         });
     }
 

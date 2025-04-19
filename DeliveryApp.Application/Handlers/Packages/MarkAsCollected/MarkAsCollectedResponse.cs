@@ -7,6 +7,6 @@ namespace DeliveryApp.Application.Handlers.Packages.MarkAsCollected;
 
 public class MarkAsCollectedResponse : BaseResponse
 {
-    public MarkAsCollectedResponse() : base(true, null) { }
+    public MarkAsCollectedResponse() : base(true, null, true) { }
     public MarkAsCollectedResponse(string error) : base(error) { }
 }

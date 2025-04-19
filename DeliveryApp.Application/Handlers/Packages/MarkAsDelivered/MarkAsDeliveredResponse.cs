@@ -7,6 +7,6 @@ namespace DeliveryApp.Application.Handlers.Packages.MarkAsDelivered;
 
 public class MarkAsDeliveredResponse : BaseResponse
 {
-    public MarkAsDeliveredResponse() : base(true, null) { }
+    public MarkAsDeliveredResponse() : base(true, null, true) { }
     public MarkAsDeliveredResponse(string error) : base(error) { }
 }

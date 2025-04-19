@@ -5,7 +5,7 @@ namespace DeliveryApp.Application.Handlers.User.ChangeActiveStatus;
 
 public class ChangeActiveStatusResponse : BaseResponse
 {
-    public ChangeActiveStatusResponse() : base(true, null) 
+    public ChangeActiveStatusResponse() : base(true, null, true) 
     {
     }
     public ChangeActiveStatusResponse(string error) : base(error) { }

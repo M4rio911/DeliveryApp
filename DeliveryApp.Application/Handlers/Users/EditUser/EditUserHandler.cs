@@ -57,11 +57,16 @@ public class EditUserHandler : ICommandHandler<EditUser, EditUserResponse>
             return new EditUserResponse(dbUser);
         }
 
+
         //IF NOT DRIVER && WAS NOT DRIVER
         if (driverUserTypeId != request.UserType
         && driverUserTypeId != dbUser.UserTypeId)
         {
             dbUser.UserTypeId = request.UserType;
+            
+            //ROLE
+            if (!await AssignNewRole(dbUser))
+                return new EditUserResponse("Failed to remove current roles");
 
             await _context.SaveChangesAsync(cancellationToken);
             return new EditUserResponse(dbUser);
@@ -77,8 +82,10 @@ public class EditUserHandler : ICommandHandler<EditUser, EditUserResponse>
             return new EditUserResponse("Error - Driver has assigned car");
 
         dbUser.UserTypeId = request.UserType;
+        if (!await AssignNewRole(dbUser))
+            return new EditUserResponse("Failed to remove current roles");
 
-        //IF TYPE DRIVER
+        //CAR - IF TYPE DRIVER
         if (existingDriver == null) {
             var newDriver = new Driver
             {
@@ -92,5 +99,19 @@ public class EditUserHandler : ICommandHandler<EditUser, EditUserResponse>
 
         await _context.SaveChangesAsync(cancellationToken);
         return new EditUserResponse(dbUser);
+    }
+
+    private async Task<bool> AssignNewRole(Domain.Entities.User dbUser)
+    {
+        var newRoleType = (await _dictionaryRepository.GetDictionary(DictionaryTypeEnum.UserType.ToString(), dbUser.UserTypeId)).Name;
+
+        var currentRoles = await _userManager.GetRolesAsync(dbUser);
+
+        var removeResult = await _userManager.RemoveFromRolesAsync(dbUser, currentRoles);
+        if (!removeResult.Succeeded) return false;
+
+        var addResult = await _userManager.AddToRoleAsync(dbUser, newRoleType);
+
+        return addResult.Succeeded;  
     }
 }

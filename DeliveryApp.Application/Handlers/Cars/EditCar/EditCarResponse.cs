@@ -7,7 +7,7 @@ namespace DeliveryApp.Application.Handlers.Cars.EditCar;
 public class EditCarResponse : BaseResponse
 {
     public GetCarsDto Car { get; set; }
-    public EditCarResponse(Car car) : base(true, null) 
+    public EditCarResponse(Car car) : base(true, null, true) 
     {
         Car = new GetCarsDto
         {

@@ -7,6 +7,6 @@ namespace DeliveryApp.Application.Handlers.Payments.SetPaymentAsPaid;
 
 public class SetPaymentAsPaidResponse : BaseResponse
 {
-    public SetPaymentAsPaidResponse() : base(true, null) { }
+    public SetPaymentAsPaidResponse() : base(true, null, true) { }
     public SetPaymentAsPaidResponse(string error) : base(error) { }
 }

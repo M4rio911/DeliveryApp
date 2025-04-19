@@ -4,6 +4,6 @@ namespace DeliveryApp.Application.Handlers.Transportations.AssignPackageToTransp
 
 public class AssignPackageToTransportationResponse : BaseResponse
 {
-    public AssignPackageToTransportationResponse() : base(true, null) { }
+    public AssignPackageToTransportationResponse() : base(true, null, true) { }
     public AssignPackageToTransportationResponse(string error) : base(error) { }
 }

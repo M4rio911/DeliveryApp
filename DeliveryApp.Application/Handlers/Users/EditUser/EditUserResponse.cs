@@ -6,7 +6,7 @@ namespace DeliveryApp.Application.Handlers.User.EditUser;
 public class EditUserResponse : BaseResponse
 {
     public GetUserDto User { get; set; }
-    public EditUserResponse(Domain.Entities.User user) : base(true, null) 
+    public EditUserResponse(Domain.Entities.User user) : base(true, null, true) 
     {
         User = new GetUserDto
         {

@@ -7,7 +7,7 @@ namespace DeliveryApp.Application.Handlers.Currencies.EditCurrency;
 public class EditCurrencyResponse : BaseResponse
 {
     public GetCurrencyDto Currency { get; set; }
-    public EditCurrencyResponse(Currency currency) : base(true, null) 
+    public EditCurrencyResponse(Currency currency) : base(true, null, true) 
     {
         Currency = new GetCurrencyDto
         {

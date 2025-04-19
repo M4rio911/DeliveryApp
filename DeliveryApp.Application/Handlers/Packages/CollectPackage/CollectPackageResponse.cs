@@ -4,6 +4,6 @@ namespace DeliveryApp.Application.Handlers.Packages.CollectPackage;
 
 public class CollectPackageResponse : BaseResponse
 {
-    public CollectPackageResponse() : base(true, null) { }
+    public CollectPackageResponse() : base(true, null, true) { }
     public CollectPackageResponse(string error) : base(error) { }
 }

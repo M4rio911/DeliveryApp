@@ -91,7 +91,7 @@ public class TransportationsController : ControllerBase
 
     [HttpPost]
     [Route("startTransportation")]
-    public async Task<IActionResult> StartTransportation([FromQuery] StartTransportationParameters parameters)
+    public async Task<IActionResult> StartTransportation([FromBody] StartTransportationParameters parameters)
     {
         if (!ModelState.IsValid)
         {
