@@ -1,7 +1,9 @@
 ﻿using DeliveryApp.Application.Interfaces.Mediator;
 using DeliveryApp.Persistance;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace DeliveryApp.Application.Handlers.Drivers.EditDriver;
 
@@ -24,15 +26,16 @@ public class EditDriverHandler : ICommandHandler<EditDriver, EditDriverResponse>
             .FirstOrDefaultAsync(cancellationToken);
             
         if(dbDriver == null) 
-            return new EditDriverResponse("No car was found under passed ID");
+            return new EditDriverResponse("No driver was found under passed ID");
 
-        var user = _httpContextAccessor.HttpContext?.User.Identities.FirstOrDefault().Name;
+        var user = _httpContextAccessor.HttpContext?.User;
         if (user == null)
         {
             throw new UnauthorizedAccessException("User is not authenticated");
         }
+        var userName = user.FindFirst(ClaimTypes.Name)?.Value;
 
-        if(dbDriver.AssignedCarId == request.AssignedCarId ||
+        if (dbDriver.AssignedCarId == request.AssignedCarId ||
            dbDriver.AssignedCarId == null && request.AssignedCarId == 0)
             return new EditDriverResponse(dbDriver);
 
@@ -46,7 +49,7 @@ public class EditDriverHandler : ICommandHandler<EditDriver, EditDriverResponse>
             if (dbOldCar != null)
             {
                 dbOldCar.AssignedUserId = null;
-                dbOldCar.ModifiedBy = user;
+                dbOldCar.ModifiedBy = userName;
                 dbOldCar.Modified = DateTime.UtcNow;
             }
 
@@ -67,18 +70,18 @@ public class EditDriverHandler : ICommandHandler<EditDriver, EditDriverResponse>
             if (dbOldCar != null)
             {
                 dbOldCar.AssignedUserId = null;
-                dbOldCar.ModifiedBy = user;
+                dbOldCar.ModifiedBy = userName;
                 dbOldCar.Modified = DateTime.UtcNow;
             }
 
             dbNewCar.AssignedUserId = request.UserId;
-            dbNewCar.ModifiedBy = user;
+            dbNewCar.ModifiedBy = userName;
             dbNewCar.Modified = DateTime.UtcNow;
 
             dbDriver.AssignedCarId = request.AssignedCarId;
         }
 
-        dbDriver.ModifiedBy = user;
+        dbDriver.ModifiedBy = userName;
         dbDriver.Modified = DateTime.UtcNow;
 
         await _context.SaveChangesAsync(cancellationToken);

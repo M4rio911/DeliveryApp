@@ -22,7 +22,7 @@ public class EditDictionaryTypeHandler : IRequestHandler<EditDictionaryType, Edi
             x.Id == request.DictionaryTypeId, cancellationToken);
 
         if (dbDictionaryType == null)
-            return new EditDictionaryTypeResponse("No car dictionary type found under passed ID");
+            return new EditDictionaryTypeResponse("No dictionary type found under passed ID");
 
         var user = _httpContextAccessor.HttpContext?.User.Identities.FirstOrDefault().Name;
         if (user == null)
