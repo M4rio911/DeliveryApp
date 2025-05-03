@@ -1,5 +1,4 @@
-﻿using DeliveryApp.Application.Handlers.Countries.EditCountry;
-using DeliveryApp.Application.Handlers.Drivers.EditDriver;
+﻿using DeliveryApp.Application.Handlers.Drivers.EditDriver;
 using DeliveryApp.Application.Handlers.Drivers.GetDriverByUserId;
 using DeliveryApp.Application.Handlers.Drivers.GetDrivers;
 using MediatR;

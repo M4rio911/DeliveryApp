@@ -6,6 +6,7 @@ using DeliveryApp.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace DeliveryApp.Application.Handlers.User.EditUser;
 
@@ -26,12 +27,30 @@ public class EditUserHandler : ICommandHandler<EditUser, EditUserResponse>
 
     public async Task<EditUserResponse> Handle(EditUser request, CancellationToken cancellationToken)
     {
-        var user = _httpContextAccessor.HttpContext?.User;
-        if (user == null)
+        var loggedClaimsUser = _httpContextAccessor.HttpContext?.User;
+        if (loggedClaimsUser == null)
         {
-            throw new UnauthorizedAccessException("User is not authenticated");
+            return new EditUserResponse("User is not authenticated");
         }
-        var userName = user.Identities.FirstOrDefault().Name;
+
+        var userEmail = loggedClaimsUser.FindFirst(ClaimTypes.Email)?.Value;
+        var userName = loggedClaimsUser.FindFirst(ClaimTypes.Name)?.Value;
+
+        var identityUser = await _userManager.FindByIdAsync(request.Id);
+        if (identityUser == null)
+        {
+            return new EditUserResponse("User not found in database");
+        }
+
+        //EMAIL CHANGED
+        if (request.Email != identityUser.Email)
+        {
+            var userInDb = await _userManager.FindByEmailAsync(request.Email);
+            if (userInDb != null)
+            {
+                return new EditUserResponse("Email already taken.");
+            }
+        }
 
         var dbUser = await _context.Users
             .Where(x => x.Id == request.Id)
@@ -49,6 +68,8 @@ public class EditUserHandler : ICommandHandler<EditUser, EditUserResponse>
         dbUser.LastName = request.LastName;
         dbUser.Email = request.Email;
         dbUser.PhoneNumber = request.PhoneNumber;
+
+        await _userManager.SetEmailAsync(dbUser, request.Email);
 
         //USER TYPE NOT CHANGED
         if (request.UserType == dbUser.UserTypeId)

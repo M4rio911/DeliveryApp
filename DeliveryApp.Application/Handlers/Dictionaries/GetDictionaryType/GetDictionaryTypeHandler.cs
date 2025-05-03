@@ -20,7 +20,8 @@ public class GetDictionaryTypeHandler : IQueryHandler<GetDictionaryType, GetDict
             .Where(x => x.Id == request.DictionaryTypeId)
             .Select(x => new GetDictionaryTypeDto() 
             {
-                Name = x.Name
+                Name = x.Name,
+                DictionaryTypeId = x.Id
             }).FirstOrDefaultAsync(cancellationToken);
 
         if (response == null)

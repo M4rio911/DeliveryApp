@@ -32,7 +32,7 @@ public class AddPackageHandler : ICommandHandler<AddPackage, AddPackageResponse>
         var user = _httpContextAccessor.HttpContext?.User;
         if (user == null)
         {
-            throw new UnauthorizedAccessException("User is not authenticated");
+            return new AddPackageResponse("User is not authenticated");
         }
         var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         var userName = user.Identities.FirstOrDefault().Name;
@@ -40,13 +40,13 @@ public class AddPackageHandler : ICommandHandler<AddPackage, AddPackageResponse>
         var reciver = await _userRepository.GetUserByEmailNTAsync(request.ReciverEmail);
         if (reciver == null)
         {
-            throw new Exception("Reciver not found");
+            return new AddPackageResponse("Reciver not found");
         }
 
         if (request.DestinationId == null)
         {
             if(request.GuestAddress ==  null)
-                throw new Exception("No address was passed");
+                return new AddPackageResponse("No address was passed");
 
             request.DestinationId = (await _addressRepository.AddGuestAddress(request.GuestAddress, userName)).Id;
         }
@@ -66,7 +66,7 @@ public class AddPackageHandler : ICommandHandler<AddPackage, AddPackageResponse>
         var paymentDb = _paymentRepository.AddPaymentAsync(payment);
         if (paymentDb == null)
         {
-            throw new Exception("Error with add payment");
+            return new AddPackageResponse("Error with add payment");
         }
         await _context.SaveChangesAsync(cancellationToken);
 
@@ -88,7 +88,8 @@ public class AddPackageHandler : ICommandHandler<AddPackage, AddPackageResponse>
 
         return new AddPackageResponse() 
         { 
-            NewPackageId = newPackage.Id
+            NewPackageId = newPackage.Id,
+            NewPaymentId = newPackage.PaymentId,
         };
     }
 }

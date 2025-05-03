@@ -51,13 +51,19 @@ public class AuthController : ControllerBase
     [HttpPost("resetPassword")]
     public async Task<IActionResult> Login([FromBody] ResetPasswordModel model)
     {
+        var userName = User.Identity?.Name;
+        var loggedUser = await _userManager.FindByNameAsync(userName);
+
         var user = await _userManager.FindByEmailAsync(model.Email);
         if (user == null)
         {
             return BadRequest("User not found.");
         }
 
-        if(user.Id != model.UserId)
+        var isAdmin = await _userManager.IsInRoleAsync(loggedUser, "Admin");
+        var isSupport = await _userManager.IsInRoleAsync(loggedUser, "Support");
+
+        if (user.Id != model.UserId && !isAdmin && !isSupport)
         {
             return BadRequest("User not found.");
         }
