@@ -500,7 +500,7 @@ namespace DeliveryApp.Persistance.Migrations
                     b.ToTable("Payments");
                 });
 
-            modelBuilder.Entity("DeliveryApp.Domain.Entities.StoragePackagesLog", b =>
+            modelBuilder.Entity("DeliveryApp.Domain.Entities.StoragePackages", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -995,7 +995,7 @@ namespace DeliveryApp.Persistance.Migrations
                     b.Navigation("PaymentType");
                 });
 
-            modelBuilder.Entity("DeliveryApp.Domain.Entities.StoragePackagesLog", b =>
+            modelBuilder.Entity("DeliveryApp.Domain.Entities.StoragePackages", b =>
                 {
                     b.HasOne("DeliveryApp.Domain.Entities.Package", "Package")
                         .WithMany()
