@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DeliveryApp.Persistance.Migrations
 {
     [DbContext(typeof(DeliveryDbContext))]
-    [Migration("20250224074853_abc1")]
-    partial class abc1
+    [Migration("20250504133552_InitialCreated")]
+    partial class InitialCreated
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -103,6 +103,9 @@ namespace DeliveryApp.Persistance.Migrations
                         .HasColumnName("CarId");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AssignedUserId")
+                        .HasColumnType("text");
 
                     b.Property<string>("Brand")
                         .IsRequired()
@@ -342,7 +345,8 @@ namespace DeliveryApp.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssignedCarId");
+                    b.HasIndex("AssignedCarId")
+                        .IsUnique();
 
                     b.HasIndex("BaseUserId");
 
@@ -366,7 +370,7 @@ namespace DeliveryApp.Persistance.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("character varying(150)");
 
-                    b.Property<int?>("DestinationId")
+                    b.Property<int>("DestinationId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("Modified")
@@ -499,7 +503,7 @@ namespace DeliveryApp.Persistance.Migrations
                     b.ToTable("Payments");
                 });
 
-            modelBuilder.Entity("DeliveryApp.Domain.Entities.StoragePackagesLog", b =>
+            modelBuilder.Entity("DeliveryApp.Domain.Entities.StoragePackages", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -610,16 +614,11 @@ namespace DeliveryApp.Persistance.Migrations
                     b.Property<int>("TransportationId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("TransportationTypeId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PackageId");
 
                     b.HasIndex("TransportationId");
-
-                    b.HasIndex("TransportationTypeId");
 
                     b.ToTable("TransportationItems");
                 });
@@ -887,8 +886,8 @@ namespace DeliveryApp.Persistance.Migrations
             modelBuilder.Entity("DeliveryApp.Domain.Entities.Driver", b =>
                 {
                     b.HasOne("DeliveryApp.Domain.Entities.Car", "AssignedCar")
-                        .WithMany()
-                        .HasForeignKey("AssignedCarId")
+                        .WithOne("AssignedUser")
+                        .HasForeignKey("DeliveryApp.Domain.Entities.Driver", "AssignedCarId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("DeliveryApp.Domain.Entities.User", "BaseUser")
@@ -907,7 +906,8 @@ namespace DeliveryApp.Persistance.Migrations
                     b.HasOne("DeliveryApp.Domain.Entities.Address", "Destination")
                         .WithMany()
                         .HasForeignKey("DestinationId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("DeliveryApp.Domain.Entities.Dictionary", "PackageStatus")
                         .WithMany()
@@ -998,7 +998,7 @@ namespace DeliveryApp.Persistance.Migrations
                     b.Navigation("PaymentType");
                 });
 
-            modelBuilder.Entity("DeliveryApp.Domain.Entities.StoragePackagesLog", b =>
+            modelBuilder.Entity("DeliveryApp.Domain.Entities.StoragePackages", b =>
                 {
                     b.HasOne("DeliveryApp.Domain.Entities.Package", "Package")
                         .WithMany()
@@ -1042,17 +1042,9 @@ namespace DeliveryApp.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("DeliveryApp.Domain.Entities.Dictionary", "TransportationType")
-                        .WithMany()
-                        .HasForeignKey("TransportationTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Package");
 
                     b.Navigation("Transportation");
-
-                    b.Navigation("TransportationType");
                 });
 
             modelBuilder.Entity("DeliveryApp.Domain.Entities.User", b =>
@@ -1114,6 +1106,12 @@ namespace DeliveryApp.Persistance.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DeliveryApp.Domain.Entities.Car", b =>
+                {
+                    b.Navigation("AssignedUser")
                         .IsRequired();
                 });
 

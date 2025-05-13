@@ -26,4 +26,8 @@
     <ProjectReference Include="..\DeliveryAppAPI.Domain\DeliveryApp.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

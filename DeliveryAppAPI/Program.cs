@@ -15,6 +15,7 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.LoadAppConfiguration();
+
 var configuration = builder.Configuration;
 
 //SERILOG
@@ -27,6 +28,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpContextAccessor();
+builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddScoped<IDictionaryRepository, DictionaryRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
@@ -53,7 +55,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ApplicationReferenceAssembly).Assembly));
 
 //DB
-builder.Services.AddEntityFrameworkNpgsql().AddDbContext<DeliveryDbContext>(options =>
+builder.Services.AddDbContext<DeliveryDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DeliveryDBConnection"));
 });
@@ -110,16 +112,40 @@ builder.Services.AddAuthorization();
 var app = builder.Build();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-//ROLES
+// MIGRATIONS + ROLES
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+    var dbContext = services.GetRequiredService<DeliveryDbContext>();
+    var retries = 5;
+    while (retries > 0)
+    {
+        try
+        {
+            dbContext.Database.Migrate();
+            Console.WriteLine("DB CONNECTION STRING: " + builder.Configuration.GetConnectionString("DeliveryDBConnection"));
 
-    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = services.GetRequiredService<UserManager<User>>();
+            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = services.GetRequiredService<UserManager<User>>();
 
-    await InitRoles.SeedRolesAsync(roleManager);
-    await InitRoles.SeedAdminUserAsync(userManager);
+
+            //SEED VALUES - only 1st run
+            //await InitRoles.SeedDictionaries(dbContext);
+            //await InitRoles.SeedRolesAsync(roleManager);
+            //await InitRoles.SeedAdminUserAsync(userManager);
+
+            break;
+        }
+        catch (Exception ex)
+        {
+            retries--;
+            Console.WriteLine($"[Startup Retry] DB not ready: {ex.Message}");
+            if (retries == 0)
+                throw;
+
+            await Task.Delay(5000);
+        }
+    }
 }
 
 // Configure the HTTP request pipeline.

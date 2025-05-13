@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DeliveryApp.Persistance.Migrations
 {
     /// <inheritdoc />
-    public partial class AddNextProperties : Migration
+    public partial class InitialCreated : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,11 +32,17 @@ namespace DeliveryApp.Persistance.Migrations
                 {
                     CarId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    AssignedUserId = table.Column<string>(type: "text", nullable: true),
+                    Brand = table.Column<string>(type: "text", nullable: false),
+                    Model = table.Column<string>(type: "text", nullable: false),
+                    Year = table.Column<int>(type: "integer", nullable: false),
+                    Seats = table.Column<int>(type: "integer", nullable: false),
+                    EngineCapacity = table.Column<int>(type: "integer", nullable: false),
+                    HorsePower = table.Column<int>(type: "integer", nullable: false),
                     MaxLoad = table.Column<decimal>(type: "numeric", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: true),
                     Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
@@ -54,7 +60,7 @@ namespace DeliveryApp.Persistance.Migrations
                     Shortcut = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: true),
                     Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
@@ -71,7 +77,7 @@ namespace DeliveryApp.Persistance.Migrations
                     Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: true),
                     Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
@@ -111,7 +117,7 @@ namespace DeliveryApp.Persistance.Migrations
                     CurrencyId = table.Column<int>(type: "integer", nullable: true),
                     CreatedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: true),
                     Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
@@ -131,13 +137,13 @@ namespace DeliveryApp.Persistance.Migrations
                 {
                     DictionaryId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    TypeId = table.Column<int>(type: "integer", nullable: false),
                     DictionaryTypeId = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     IsDefault = table.Column<bool>(type: "boolean", nullable: false),
+                    IsPublic = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: true),
                     Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
@@ -187,6 +193,37 @@ namespace DeliveryApp.Persistance.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PackagePrices",
+                columns: table => new
+                {
+                    PackagePriceId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    PackageTypeId = table.Column<int>(type: "integer", nullable: false),
+                    CurrencyId = table.Column<int>(type: "integer", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: true),
+                    Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PackagePrices", x => x.PackagePriceId);
+                    table.ForeignKey(
+                        name: "FK_PackagePrices_Currencies_CurrencyId",
+                        column: x => x.CurrencyId,
+                        principalTable: "Currencies",
+                        principalColumn: "CurrencyId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PackagePrices_Dictionaries_PackageTypeId",
+                        column: x => x.PackageTypeId,
+                        principalTable: "Dictionaries",
+                        principalColumn: "DictionaryId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Payments",
                 columns: table => new
                 {
@@ -194,26 +231,34 @@ namespace DeliveryApp.Persistance.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     PaymentTypeId = table.Column<int>(type: "integer", nullable: false),
                     PaymentStatusId = table.Column<int>(type: "integer", nullable: false),
+                    CurrencyId = table.Column<int>(type: "integer", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: true),
                     Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Payments", x => x.PaymentId);
                     table.ForeignKey(
+                        name: "FK_Payments_Currencies_CurrencyId",
+                        column: x => x.CurrencyId,
+                        principalTable: "Currencies",
+                        principalColumn: "CurrencyId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Payments_Dictionaries_PaymentStatusId",
                         column: x => x.PaymentStatusId,
                         principalTable: "Dictionaries",
                         principalColumn: "DictionaryId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Payments_Dictionaries_PaymentTypeId",
                         column: x => x.PaymentTypeId,
                         principalTable: "Dictionaries",
                         principalColumn: "DictionaryId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -222,17 +267,18 @@ namespace DeliveryApp.Persistance.Migrations
                 {
                     AddressId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: true),
                     CountryId = table.Column<int>(type: "integer", nullable: true),
-                    PostCodeId = table.Column<int>(type: "integer", nullable: true),
                     PostCode = table.Column<string>(type: "text", nullable: false),
                     City = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Street = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Number = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     AddressTypeId = table.Column<int>(type: "integer", nullable: false),
+                    GuestAddress = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: true),
                     Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
@@ -347,18 +393,18 @@ namespace DeliveryApp.Persistance.Migrations
                 name: "Drivers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    DriverId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     BaseUserId = table.Column<string>(type: "text", nullable: false),
-                    AssignedCarId = table.Column<int>(type: "integer", nullable: false),
+                    AssignedCarId = table.Column<int>(type: "integer", nullable: true),
                     CreatedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: true),
                     Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Drivers", x => x.Id);
+                    table.PrimaryKey("PK_Drivers", x => x.DriverId);
                     table.ForeignKey(
                         name: "FK_Drivers_AspNetUsers_BaseUserId",
                         column: x => x.BaseUserId,
@@ -381,14 +427,13 @@ namespace DeliveryApp.Persistance.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     SenderId = table.Column<string>(type: "text", nullable: false),
                     ReciverId = table.Column<string>(type: "text", nullable: false),
-                    CountryId = table.Column<int>(type: "integer", nullable: false),
                     DestinationId = table.Column<int>(type: "integer", nullable: false),
                     PackageTypeId = table.Column<int>(type: "integer", nullable: false),
                     PackageStatusId = table.Column<int>(type: "integer", nullable: false),
                     PaymentId = table.Column<int>(type: "integer", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: true),
                     Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
@@ -411,12 +456,6 @@ namespace DeliveryApp.Persistance.Migrations
                         column: x => x.SenderId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Packages_Countries_CountryId",
-                        column: x => x.CountryId,
-                        principalTable: "Countries",
-                        principalColumn: "CountryId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Packages_Dictionaries_PackageStatusId",
@@ -445,12 +484,11 @@ namespace DeliveryApp.Persistance.Migrations
                     TransportationId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     AssignedDriverId = table.Column<int>(type: "integer", nullable: false),
-                    TransportationTypeId = table.Column<int>(type: "integer", nullable: false),
                     TransportationStatusId = table.Column<int>(type: "integer", nullable: false),
                     DateOfTransport = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: true),
                     Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
@@ -463,16 +501,35 @@ namespace DeliveryApp.Persistance.Migrations
                         principalColumn: "DictionaryId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Transportations_Dictionaries_TransportationTypeId",
-                        column: x => x.TransportationTypeId,
-                        principalTable: "Dictionaries",
-                        principalColumn: "DictionaryId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_Transportations_Drivers_AssignedDriverId",
                         column: x => x.AssignedDriverId,
                         principalTable: "Drivers",
-                        principalColumn: "Id",
+                        principalColumn: "DriverId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StoragePackages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    PackageId = table.Column<int>(type: "integer", nullable: false),
+                    DateOfArrival = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DateOfExit = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: true),
+                    Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StoragePackages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StoragePackages_Packages_PackageId",
+                        column: x => x.PackageId,
+                        principalTable: "Packages",
+                        principalColumn: "PackageId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -486,7 +543,7 @@ namespace DeliveryApp.Persistance.Migrations
                     PackageId = table.Column<int>(type: "integer", nullable: false),
                     CreatedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    ModifiedBy = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: true),
                     Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
@@ -576,7 +633,8 @@ namespace DeliveryApp.Persistance.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Drivers_AssignedCarId",
                 table: "Drivers",
-                column: "AssignedCarId");
+                column: "AssignedCarId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Drivers_BaseUserId",
@@ -584,9 +642,14 @@ namespace DeliveryApp.Persistance.Migrations
                 column: "BaseUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Packages_CountryId",
-                table: "Packages",
-                column: "CountryId");
+                name: "IX_PackagePrices_CurrencyId",
+                table: "PackagePrices",
+                column: "CurrencyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PackagePrices_PackageTypeId",
+                table: "PackagePrices",
+                column: "PackageTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Packages_DestinationId",
@@ -619,6 +682,11 @@ namespace DeliveryApp.Persistance.Migrations
                 column: "SenderId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Payments_CurrencyId",
+                table: "Payments",
+                column: "CurrencyId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Payments_PaymentStatusId",
                 table: "Payments",
                 column: "PaymentStatusId");
@@ -627,6 +695,11 @@ namespace DeliveryApp.Persistance.Migrations
                 name: "IX_Payments_PaymentTypeId",
                 table: "Payments",
                 column: "PaymentTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StoragePackages_PackageId",
+                table: "StoragePackages",
+                column: "PackageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TransportationItems_PackageId",
@@ -647,11 +720,6 @@ namespace DeliveryApp.Persistance.Migrations
                 name: "IX_Transportations_TransportationStatusId",
                 table: "Transportations",
                 column: "TransportationStatusId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Transportations_TransportationTypeId",
-                table: "Transportations",
-                column: "TransportationTypeId");
         }
 
         /// <inheritdoc />
@@ -671,6 +739,12 @@ namespace DeliveryApp.Persistance.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "PackagePrices");
+
+            migrationBuilder.DropTable(
+                name: "StoragePackages");
 
             migrationBuilder.DropTable(
                 name: "TransportationItems");
