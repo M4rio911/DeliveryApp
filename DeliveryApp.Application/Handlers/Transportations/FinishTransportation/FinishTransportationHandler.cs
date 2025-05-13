@@ -81,7 +81,7 @@ public class FinishTransportationHandler : IQueryHandler<FinishTransportation, F
                 Created = DateTime.UtcNow,
                 DateOfArrival = DateTime.UtcNow,
                 CreatedBy = user.Name,
-                PackageId = item.Id
+                PackageId = item.Package.Id
             };
 
             _context.Add(newStorageItem);
